@@ -86,9 +86,9 @@ export async function POST(request: NextRequest) {
     };
 
     // Build prompt
-    let prompt = `Analyze the following visitor's behavior and determine their intent based on their browsing patterns.
+    let prompt = `以下の訪問者の行動を分析し、閲覧パターンに基づいて訪問意図を判断してください。
 
-## Visit History by Date:
+## 日付別の訪問履歴:
 
 `;
 
@@ -99,16 +99,16 @@ export async function POST(request: NextRequest) {
         const pageInfo = pageInfoMap.get(path);
         prompt += `- **${path}** (${formatDuration(duration)})\n`;
         if (pageInfo?.title) {
-          prompt += `  Title: ${pageInfo.title}\n`;
+          prompt += `  タイトル: ${pageInfo.title}\n`;
         }
         if (pageInfo?.summary) {
-          prompt += `  Summary: ${pageInfo.summary}\n`;
+          prompt += `  概要: ${pageInfo.summary}\n`;
         }
       }
       prompt += "\n";
     }
 
-    prompt += `## Total Time per Page:
+    prompt += `## ページごとの合計滞在時間:
 
 `;
 
@@ -117,23 +117,23 @@ export async function POST(request: NextRequest) {
       const pageInfo = pageInfoMap.get(path);
       prompt += `- **${path}**: ${formatDuration(duration)}\n`;
       if (pageInfo?.title) {
-        prompt += `  Title: ${pageInfo.title}\n`;
+        prompt += `  タイトル: ${pageInfo.title}\n`;
       }
     }
 
     prompt += `
 
-Based on this data, please:
-1. Identify the visitor's primary intent or goal
-2. Analyze their journey pattern (e.g., research, comparison, ready to purchase, learning)
-3. Highlight key interests based on pages visited and time spent
-4. Suggest what actions or content might be most relevant to them
+このデータに基づいて、以下の点を分析してください:
+1. 訪問者の主な目的や意図を特定する
+2. 訪問パターンを分析する（例: 情報収集、比較検討、購入意欲、学習目的など）
+3. 訪問ページと滞在時間から主な関心事を明らかにする
+4. この訪問者に最も関連性の高いアクションやコンテンツを提案する
 
-Provide a concise analysis in Japanese (2-3 paragraphs) that would help understand this visitor's intent.`;
+この訪問者の意図を理解するのに役立つ、簡潔な分析を日本語で2-3段落で提供してください。`;
 
     // Generate analysis using Gemini
     const { text } = await generateText({
-      model: google("gemini-2.0-flash-exp"),
+      model: google("gemini-3-flash-preview"),
       prompt,
     });
 

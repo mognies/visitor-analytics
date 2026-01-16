@@ -82,6 +82,51 @@ export default function VisitorAnalytics() {
     return `${seconds}s ago`;
   };
 
+  // Group consecutive same paths
+  const groupConsecutivePaths = (paths: VisitorPath[]) => {
+    if (paths.length === 0) return [];
+
+    const grouped: Array<{
+      path: string;
+      count: number;
+      totalDuration: number;
+      firstTimestamp: number;
+      lastTimestamp: number;
+    }> = [];
+
+    let current = {
+      path: paths[0].path,
+      count: 1,
+      totalDuration: paths[0].duration,
+      firstTimestamp: paths[0].timestamp,
+      lastTimestamp: paths[0].timestamp,
+    };
+
+    for (let i = 1; i < paths.length; i++) {
+      if (paths[i].path === current.path) {
+        // Same path, merge
+        current.count++;
+        current.totalDuration += paths[i].duration;
+        current.lastTimestamp = paths[i].timestamp;
+      } else {
+        // Different path, save current and start new
+        grouped.push({ ...current });
+        current = {
+          path: paths[i].path,
+          count: 1,
+          totalDuration: paths[i].duration,
+          firstTimestamp: paths[i].timestamp,
+          lastTimestamp: paths[i].timestamp,
+        };
+      }
+    }
+
+    // Don't forget the last group
+    grouped.push(current);
+
+    return grouped;
+  };
+
   const handleAnalyzeIntent = async () => {
     if (!selectedVisitor) return;
 
@@ -590,47 +635,51 @@ export default function VisitorAnalytics() {
                   Visit Timeline
                 </h4>
                 <div className="space-y-3 max-h-96 overflow-y-auto">
-                  {selectedVisitor.paths.map((path, index) => (
-                    <div
-                      key={index}
-                      className="bg-slate-50 border border-slate-200 p-4 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-all cursor-pointer"
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex-1">
-                          <div className="flex items-center">
-                            <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
-                              <svg
-                                className="w-5 h-5 text-blue-600"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                                />
-                              </svg>
-                            </div>
-                            <div>
-                              <div className="text-sm font-semibold text-slate-900">
-                                {path.path}
+                  {groupConsecutivePaths(selectedVisitor.paths).map(
+                    (group, index) => (
+                      <div
+                        key={index}
+                        className="bg-slate-50 border border-slate-200 p-4 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-all cursor-pointer"
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center">
+                              <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
+                                <svg
+                                  className="w-5 h-5 text-blue-600"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                  />
+                                </svg>
                               </div>
-                              <div className="text-xs text-slate-500 mt-0.5">
-                                {formatDate(path.timestamp)}
+                              <div>
+                                <div className="text-sm font-semibold text-slate-900">
+                                  {group.path}
+                                </div>
+                                <div className="text-xs text-slate-500 mt-0.5">
+                                  {group.count > 1
+                                    ? `${formatDate(group.firstTimestamp)} - ${formatDate(group.lastTimestamp)}`
+                                    : formatDate(group.firstTimestamp)}
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                        <div className="ml-4">
-                          <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-gradient-to-r from-blue-500 to-blue-600 text-white">
-                            {formatDuration(path.duration)}
-                          </span>
+                          <div className="ml-4">
+                            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+                              {formatDuration(group.totalDuration)}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ),
+                  )}
                 </div>
               </div>
             </div>
