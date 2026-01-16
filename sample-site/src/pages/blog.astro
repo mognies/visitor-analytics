@@ -1,0 +1,66 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const posts = [
+  { title: "5 Ways Analytics Improve E-Commerce", date: "2026-01-15", excerpt: "Learn how data-driven insights can transform your online store..." },
+  { title: "The Future of Online Shopping", date: "2026-01-10", excerpt: "Exploring upcoming trends in e-commerce technology..." },
+  { title: "Customer Experience Best Practices", date: "2026-01-05", excerpt: "Strategies to enhance user satisfaction and retention..." },
+];
+---
+
+<Layout title="Blog - ShopDemo">
+  <style>
+    .hero {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+    .posts {
+      display: grid;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    .post {
+      background: white;
+      border-radius: 10px;
+      padding: 2rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s;
+    }
+    .post:hover {
+      transform: translateY(-2px);
+    }
+    .post h3 {
+      color: #667eea;
+      margin-bottom: 0.5rem;
+    }
+    .post-date {
+      color: #718096;
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+    }
+  </style>
+
+  <div class="hero">
+    <h1>Blog</h1>
+    <p>Latest insights and updates</p>
+  </div>
+
+  <div class="container">
+    <div class="posts">
+      {posts.map((post) => (
+        <article class="post">
+          <h3>{post.title}</h3>
+          <div class="post-date">{post.date}</div>
+          <p>{post.excerpt}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,96 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Sample E-Commerce Site - Home">
+  <style>
+    .hero {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 6rem 2rem;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    .hero p {
+      font-size: 1.25rem;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+    }
+    .btn {
+      display: inline-block;
+      padding: 1rem 2rem;
+      background: white;
+      color: #667eea;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: bold;
+      transition: transform 0.3s;
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    .feature {
+      padding: 2rem;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s;
+    }
+    .feature:hover {
+      transform: translateY(-5px);
+    }
+    .feature h3 {
+      color: #667eea;
+      margin-bottom: 1rem;
+    }
+  </style>
+
+  <div class="hero">
+    <h1>Welcome to ShopDemo</h1>
+    <p>
+      Experience the future of online shopping with analytics-powered
+      insights
+    </p>
+    <a href="/products" class="btn">Browse Products</a>
+  </div>
+
+  <div class="container">
+    <h2>Why Choose Us?</h2>
+    <div class="features">
+      <div class="feature">
+        <h3>🚀 Fast Delivery</h3>
+        <p>
+          Get your products delivered within 24 hours anywhere in
+          the country.
+        </p>
+      </div>
+      <div class="feature">
+        <h3>💳 Secure Payments</h3>
+        <p>
+          Shop with confidence using our encrypted payment system.
+        </p>
+      </div>
+      <div class="feature">
+        <h3>🎁 Great Deals</h3>
+        <p>
+          Enjoy exclusive discounts and offers on our premium
+          products.
+        </p>
+      </div>
+    </div>
+  </div>
+</Layout>

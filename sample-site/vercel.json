@@ -1,7 +1,8 @@
 {
-  "buildCommand": "bun run build",
+  "buildCommand": "astro build",
   "installCommand": "bun install",
   "outputDirectory": "./dist",
+  "framework": "astro",
   "regions": ["iad1"],
   "headers": [
     {

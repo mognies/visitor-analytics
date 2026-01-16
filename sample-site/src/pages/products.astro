@@ -1,0 +1,81 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const products = [
+  { name: "Premium Headphones", price: 299, category: "Electronics" },
+  { name: "Smart Watch Pro", price: 449, category: "Electronics" },
+  { name: "Wireless Keyboard", price: 129, category: "Accessories" },
+  { name: "4K Monitor", price: 599, category: "Electronics" },
+  { name: "Gaming Mouse", price: 79, category: "Accessories" },
+  { name: "Laptop Stand", price: 49, category: "Accessories" },
+];
+---
+
+<Layout title="Products - ShopDemo">
+  <style>
+    .hero {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    .product {
+      background: white;
+      border-radius: 10px;
+      padding: 2rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s;
+    }
+    .product:hover {
+      transform: translateY(-5px);
+    }
+    .product h3 {
+      color: #667eea;
+      margin-bottom: 0.5rem;
+    }
+    .price {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #2d3748;
+      margin: 1rem 0;
+    }
+    .category {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background: #e6fffa;
+      color: #234e52;
+      border-radius: 20px;
+      font-size: 0.875rem;
+    }
+  </style>
+
+  <div class="hero">
+    <h1>Our Products</h1>
+    <p>Discover our amazing collection</p>
+  </div>
+
+  <div class="container">
+    <h2>Featured Products</h2>
+    <div class="products">
+      {products.map((product) => (
+        <div class="product">
+          <span class="category">{product.category}</span>
+          <h3>{product.name}</h3>
+          <p class="price">${product.price}</p>
+          <p>High quality product with excellent reviews</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</Layout>

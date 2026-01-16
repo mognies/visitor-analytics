@@ -1,0 +1,74 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="About Us - ShopDemo">
+  <style>
+    .hero {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+    .content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+      line-height: 1.8;
+    }
+    .content h2 {
+      color: #667eea;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+    .team {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    .team-member {
+      text-align: center;
+      padding: 1.5rem;
+      background: #f7fafc;
+      border-radius: 10px;
+    }
+    .team-member h4 {
+      color: #667eea;
+      margin: 0.5rem 0;
+    }
+  </style>
+
+  <div class="hero">
+    <h1>About ShopDemo</h1>
+  </div>
+
+  <div class="content">
+    <p>Welcome to ShopDemo, your premier destination for cutting-edge technology and innovation. This is a demonstration site built to showcase the Visitor Analytics SDK capabilities.</p>
+
+    <h2>Our Mission</h2>
+    <p>We're dedicated to providing our customers with the latest and greatest products while maintaining the highest standards of quality and customer service. Our analytics-driven approach ensures we understand and meet your needs.</p>
+
+    <h2>Why Analytics Matter</h2>
+    <p>By tracking user engagement and behavior, we can continuously improve your shopping experience. This demo site helps us understand which products and content resonate most with our visitors.</p>
+
+    <h2>Our Team</h2>
+    <div class="team">
+      <div class="team-member">
+        <div style="font-size: 3rem;">👨‍💼</div>
+        <h4>John Doe</h4>
+        <p>CEO</p>
+      </div>
+      <div class="team-member">
+        <div style="font-size: 3rem;">👩‍💻</div>
+        <h4>Jane Smith</h4>
+        <p>CTO</p>
+      </div>
+      <div class="team-member">
+        <div style="font-size: 3rem;">👨‍🎨</div>
+        <h4>Mike Johnson</h4>
+        <p>Designer</p>
+      </div>
+    </div>
+  </div>
+</Layout>

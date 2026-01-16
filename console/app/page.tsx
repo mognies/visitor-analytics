@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import ImportForm from "./components/ImportForm";
 import PagesTable from "./components/PagesTable";
 import VisitorAnalytics from "./components/VisitorAnalytics";
-import AIInsights from "./components/AIInsights";
 
 interface PathAnalytic {
   path: string;
@@ -453,11 +452,6 @@ export default function Home() {
                   </tbody>
                 </table>
               </div>
-            </div>
-
-            {/* AI Insights */}
-            <div className="mt-8">
-              <AIInsights mode="overall" />
             </div>
 
             <div className="mt-6 text-center">

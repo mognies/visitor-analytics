@@ -1,0 +1,150 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const caseStudies = [
+  {
+    company: "TechCorp Inc.",
+    industry: "Technology",
+    result: "300% increase in conversions",
+    description: "How TechCorp leveraged our analytics to triple their online sales.",
+  },
+  {
+    company: "Fashion Forward",
+    industry: "Retail",
+    result: "50% reduction in cart abandonment",
+    description: "Strategic insights helped optimize the checkout experience.",
+  },
+  {
+    company: "Global Ventures",
+    industry: "Finance",
+    result: "2x customer retention",
+    description: "Data-driven personalization doubled customer lifetime value.",
+  },
+  {
+    company: "HealthPlus",
+    industry: "Healthcare",
+    result: "40% faster time to market",
+    description: "Analytics accelerated product development and launch cycles.",
+  },
+  {
+    company: "EduLearn",
+    industry: "Education",
+    result: "85% user satisfaction",
+    description: "Understanding learner behavior transformed course engagement.",
+  },
+  {
+    company: "GreenEarth",
+    industry: "Sustainability",
+    result: "$2M revenue growth",
+    description: "Targeted campaigns based on visitor insights drove massive growth.",
+  },
+];
+---
+
+<Layout title="Case Studies - ShopDemo">
+  <style>
+    .hero {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+    .case-studies {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    .case-study {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s;
+    }
+    .case-study:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+    }
+    .company {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #2d3748;
+      margin-bottom: 0.5rem;
+    }
+    .industry {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background: #e6fffa;
+      color: #234e52;
+      border-radius: 20px;
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+    }
+    .result {
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: #667eea;
+      margin: 1rem 0;
+    }
+    .description {
+      color: #4a5568;
+      line-height: 1.6;
+    }
+    .cta {
+      margin-top: 4rem;
+      text-align: center;
+      padding: 3rem 2rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 15px;
+      color: white;
+    }
+    .cta h2 {
+      margin-bottom: 1rem;
+    }
+    .cta-button {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 1rem 2rem;
+      background: white;
+      color: #667eea;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: bold;
+      transition: transform 0.3s;
+    }
+    .cta-button:hover {
+      transform: translateY(-2px);
+    }
+  </style>
+
+  <div class="hero">
+    <h1>Success Stories</h1>
+    <p>Real results from real businesses</p>
+  </div>
+
+  <div class="container">
+    <h2>Featured Case Studies</h2>
+    <div class="case-studies">
+      {caseStudies.map((study) => (
+        <div class="case-study">
+          <div class="company">{study.company}</div>
+          <span class="industry">{study.industry}</span>
+          <div class="result">{study.result}</div>
+          <p class="description">{study.description}</p>
+        </div>
+      ))}
+    </div>
+
+    <div class="cta">
+      <h2>Ready to Transform Your Business?</h2>
+      <p>Join these successful companies and start your analytics journey today.</p>
+      <a href="/contact" class="cta-button">Get Started</a>
+    </div>
+  </div>
+</Layout>
