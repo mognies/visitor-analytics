@@ -16,8 +16,10 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@ai-sdk/google": "^3.0.10",
     "@libsql/client": "^0.17.0",
     "@mendable/firecrawl-js": "^4.11.1",
+    "ai": "^6.0.38",
     "drizzle-orm": "latest",
     "next": "latest",
     "react": "latest",

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 
 interface PageWithAnalytics {
   id: number;
@@ -177,7 +177,7 @@ export default function PagesTable({ refresh }: { refresh: number }) {
               data?.pages.map((page) => {
                 const isExpanded = expandedPageId === page.id;
                 return (
-                  <>
+                  <Fragment key={page.id}>
                     <tr
                       key={page.id}
                       onClick={() =>
@@ -317,7 +317,7 @@ export default function PagesTable({ refresh }: { refresh: number }) {
                         </td>
                       </tr>
                     )}
-                  </>
+                  </Fragment>
                 );
               })
             )}

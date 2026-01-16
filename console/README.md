@@ -10,7 +10,8 @@ Next.js application for analyzing customer interests based on page visit duratio
 - 🔄 Auto-refresh every 30 seconds
 - 🎯 Visitor and visit metrics
 - 🔥 Firecrawl integration for website import
-- 📄 Page metadata tracking (title, description)
+- 📄 Page metadata tracking (title, summary)
+- 🤖 AI-powered visitor intent analysis with Gemini
 
 ## Getting Started
 
@@ -102,10 +103,14 @@ API_KEY=your-secret-api-key
 
 # Firecrawl API Key (get from https://firecrawl.dev)
 FIRECRAWL_API_KEY=your-firecrawl-api-key
+
+# Google Generative AI API Key (get from https://ai.google.dev)
+GOOGLE_GENERATIVE_AI_API_KEY=your-google-ai-api-key
 ```
 
 **Note**:
 - You need a Firecrawl API key to use the page import feature. Sign up at [https://firecrawl.dev](https://firecrawl.dev) to get your API key.
+- You need a Google AI API key to use the AI intent analysis feature. Get your API key at [https://ai.google.dev](https://ai.google.dev).
 - For local development, run `turso dev --db-file analytics.db` in a separate terminal before starting the dev server.
 
 ## API Endpoints
@@ -181,6 +186,33 @@ Imports pages from a website using Firecrawl.
   "success": true,
   "count": 42,
   "changes": 42
+}
+```
+
+### POST /api/analyze-intent
+
+Analyzes visitor intent using AI based on their journey timeline.
+
+**Request Body**:
+```json
+{
+  "visitorId": "visitor-id",
+  "paths": [
+    {
+      "path": "/products",
+      "duration": 30000,
+      "timestamp": 1234567890
+    }
+  ]
+}
+```
+
+**Response**:
+```json
+{
+  "success": true,
+  "analysis": "Based on the visitor's behavior...",
+  "visitorId": "visitor-id"
 }
 ```
 
@@ -275,6 +307,7 @@ bun run start
 - **Styling**: Tailwind CSS 4
 - **Runtime**: Bun
 - **Crawler**: Firecrawl
+- **AI**: Vercel AI SDK with Google Gemini
 
 ## License
 

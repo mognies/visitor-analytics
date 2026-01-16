@@ -89,13 +89,26 @@ export default function VisitorAnalytics() {
     setIntentAnalysis(null);
 
     try {
-      // TODO: Call AI API to analyze intent
-      // Simulate API call for now
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      setIntentAnalysis("Analysis will be implemented in the next step.");
+      const response = await fetch("/api/analyze-intent", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          visitorId: selectedVisitor.visitorId,
+          paths: selectedVisitor.paths,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to analyze intent");
+      }
+
+      const data = await response.json();
+      setIntentAnalysis(data.analysis);
     } catch (error) {
       console.error("Failed to analyze intent:", error);
-      setIntentAnalysis(null);
+      setIntentAnalysis("Failed to analyze visitor intent. Please try again.");
     } finally {
       setAnalyzingIntent(false);
     }
