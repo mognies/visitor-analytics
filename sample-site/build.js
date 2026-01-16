@@ -7,7 +7,7 @@ const apiEndpoint =
   process.env.ANALYTICS_API_ENDPOINT || "http://localhost:3000/api";
 const apiKey = process.env.ANALYTICS_API_KEY || "demo-api-key";
 const flushInterval = process.env.ANALYTICS_FLUSH_INTERVAL || "10000";
-const sdkUrl = process.env.ANALYTICS_SDK_URL || "../sdk/dist/index.js";
+const sdkUrl = process.env.ANALYTICS_SDK_URL || "../sdk/dist/analytics-sdk.js";
 
 // Generate env.js with actual values
 const envContent = `// Auto-generated at build time

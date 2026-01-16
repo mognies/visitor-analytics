@@ -34,7 +34,7 @@ Set these environment variables in your Vercel project settings:
 | `ANALYTICS_API_ENDPOINT` | Console app API URL | `https://your-console.vercel.app/api` |
 | `ANALYTICS_API_KEY` | Must match console's API_KEY | `your-secure-random-key-123` |
 | `ANALYTICS_FLUSH_INTERVAL` | Data send interval (ms) | `10000` |
-| `ANALYTICS_SDK_URL` | SDK source URL (local or CDN) | `../sdk/dist/index.js` or `https://cdn.example.com/sdk.js` |
+| `ANALYTICS_SDK_URL` | SDK source URL (local or CDN) | `../sdk/dist/analytics-sdk.js` or `https://cdn.example.com/analytics-sdk.js` |
 
 ## Deployment Steps
 
@@ -92,7 +92,7 @@ After deployment, add environment variables in Vercel dashboard:
    - `ANALYTICS_API_ENDPOINT`: Your console app URL + `/api` (e.g., `https://visitor-analytics-console.vercel.app/api`)
    - `ANALYTICS_API_KEY`: Same value as console's `API_KEY`
    - `ANALYTICS_FLUSH_INTERVAL`: `10000` (or your preferred interval)
-   - `ANALYTICS_SDK_URL`: `../sdk/dist/index.js` (or CDN URL if hosting SDK separately)
+   - `ANALYTICS_SDK_URL`: `../sdk/dist/analytics-sdk.js` (or CDN URL if hosting SDK separately)
 
 ### 4. Configure Build Settings
 

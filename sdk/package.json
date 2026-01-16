@@ -4,12 +4,12 @@
   "private": true,
   "license": "UNLICENSED",
   "description": "Web SDK for tracking visitor page history and analyzing customer interests",
-  "module": "dist/index.js",
-  "main": "dist/index.js",
+  "module": "dist/analytics-sdk.js",
+  "main": "dist/analytics-sdk.js",
   "type": "module",
   "scripts": {
-    "build": "bun build ./index.ts --outdir ./dist --target browser --format esm --minify",
-    "dev": "bun build ./index.ts --outdir ./dist --target browser --format esm --watch",
+    "build": "bun build ./index.ts --outfile ./dist/analytics-sdk.js --target browser --format esm --minify",
+    "dev": "bun build ./index.ts --outfile ./dist/analytics-sdk.js --target browser --format esm --watch",
     "typecheck": "tsc --noEmit"
   },
   "files": [

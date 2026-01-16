@@ -6,4 +6,5 @@ export const config = {
 };
 
 // SDK source URL (can be CDN or local)
-export const sdkUrl = window.ANALYTICS_SDK_URL || "../sdk/dist/index.js";
+export const sdkUrl =
+  window.ANALYTICS_SDK_URL || "../sdk/dist/analytics-sdk.js";
