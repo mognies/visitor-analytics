@@ -1,7 +1,7 @@
 {
-  "name": "immedio-sample-site",
+  "name": "visitor-analytics-sample-site",
   "version": "1.0.0",
-  "description": "Sample website with Immedio analytics SDK integration",
+  "description": "Sample website with Visitor Analytics SDK integration",
   "type": "module",
   "scripts": {
     "build": "bun run build.js",

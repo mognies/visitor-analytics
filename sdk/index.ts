@@ -1,19 +1,19 @@
-import { ImmedioTracker } from "./tracker";
-import type { ImmedioConfig, PathDuration } from "./types";
+import { AnalyticsTracker } from "./tracker";
+import type { TrackerConfig, PathDuration } from "./types";
 
-export { ImmedioTracker };
-export type { ImmedioConfig, PathDuration };
+export { AnalyticsTracker };
+export type { TrackerConfig, PathDuration };
 
 // Global instance for easy access
-let globalTracker: ImmedioTracker | null = null;
+let globalTracker: AnalyticsTracker | null = null;
 
-export async function init(config: ImmedioConfig): Promise<void> {
+export async function init(config: TrackerConfig): Promise<void> {
   if (globalTracker) {
-    console.warn("Immedio tracker already initialized");
+    console.warn("Analytics tracker already initialized");
     return;
   }
 
-  globalTracker = new ImmedioTracker(config);
+  globalTracker = new AnalyticsTracker(config);
   await globalTracker.init();
 }
 

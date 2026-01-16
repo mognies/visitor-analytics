@@ -1,4 +1,4 @@
-# Immedio Analytics Console
+# Visitor Analytics Console
 
 Next.js application for analyzing customer interests based on page visit duration.
 

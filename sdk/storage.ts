@@ -1,18 +1,18 @@
 import Dexie, { type Table } from "dexie";
 import type { PathDuration } from "./types";
 
-class ImmedioDatabase extends Dexie {
+class AnalyticsDatabase extends Dexie {
   pathDurations!: Table<PathDuration>;
 
   constructor() {
-    super("ImmedioAnalytics");
+    super("VisitorAnalytics");
     this.version(1).stores({
       pathDurations: "++id, path, timestamp, visitorId",
     });
   }
 }
 
-export const db = new ImmedioDatabase();
+export const db = new AnalyticsDatabase();
 
 export async function savePathDuration(
   duration: PathDuration,

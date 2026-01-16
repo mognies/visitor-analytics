@@ -6,7 +6,7 @@ export interface PathDuration {
   visitorId: string;
 }
 
-export interface ImmedioConfig {
+export interface TrackerConfig {
   apiEndpoint: string;
   apiKey: string;
   flushInterval?: number; // in milliseconds

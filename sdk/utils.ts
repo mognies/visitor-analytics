@@ -3,7 +3,7 @@ export function generateId(): string {
 }
 
 export function getVisitorId(): string {
-  const storageKey = "immedio_visitor_id";
+  const storageKey = "visitor_id";
   let visitorId = localStorage.getItem(storageKey);
 
   if (!visitorId) {

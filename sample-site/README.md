@@ -1,6 +1,6 @@
 # Sample E-Commerce Site
 
-A demo website to showcase the Immedio Analytics SDK integration.
+A demo website to showcase the Visitor Analytics Analytics SDK integration.
 
 ## Pages
 
@@ -13,7 +13,7 @@ A demo website to showcase the Immedio Analytics SDK integration.
 ## Features
 
 - 🎨 Modern, responsive design
-- 📊 Immedio Analytics SDK integrated on all pages
+- 📊 Visitor Analytics Analytics SDK integrated on all pages
 - 🔄 Navigation between pages
 - 📱 Mobile-friendly layout
 - ⚡ Fast and lightweight
@@ -45,7 +45,7 @@ Then open http://localhost:8000 (or the appropriate port) in your browser.
 
 ## How It Works
 
-1. Each page includes the Immedio Analytics SDK at the bottom
+1. Each page includes the Visitor Analytics Analytics SDK at the bottom
 2. SDK automatically tracks:
    - Page path (e.g., `/products.html`)
    - Time spent on each page

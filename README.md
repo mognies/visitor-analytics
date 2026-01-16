@@ -1,11 +1,11 @@
-# Immedio Lead Analytics
+# Visitor Analytics Visitor Analytics
 
 A customer interest analytics system that tracks visitor engagement based on page visit duration.
 
 ## 📁 Project Structure
 
 ```
-immedio-lead-analytics/
+visitor-analytics-visitor-analytics/
 ├── sdk/              # Browser SDK for tracking page visits
 ├── console/          # Next.js dashboard for analytics visualization
 ├── sample-site/      # Demo website with SDK integration
@@ -92,7 +92,7 @@ See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment instructions to Ver
    cd sample-site
    vercel
    ```
-   Set environment variables: `IMMEDIO_API_ENDPOINT`, `IMMEDIO_API_KEY`, `IMMEDIO_FLUSH_INTERVAL`
+   Set environment variables: `ANALYTICS_API_ENDPOINT`, `ANALYTICS_API_KEY`, `ANALYTICS_FLUSH_INTERVAL`
 
 ## 🔐 Environment Variables
 
@@ -106,9 +106,9 @@ FIRECRAWL_API_KEY=your-firecrawl-api-key
 ### Sample Site
 
 ```bash
-IMMEDIO_API_ENDPOINT=https://your-console.vercel.app/api
-IMMEDIO_API_KEY=your-secure-api-key
-IMMEDIO_FLUSH_INTERVAL=10000
+ANALYTICS_API_ENDPOINT=https://your-console.vercel.app/api
+ANALYTICS_API_KEY=your-secure-api-key
+ANALYTICS_FLUSH_INTERVAL=10000
 ```
 
 See `.env.example` files for more details.

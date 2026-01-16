@@ -1,4 +1,4 @@
-import type { ImmedioConfig, PathDuration } from "./types";
+import type { TrackerConfig, PathDuration } from "./types";
 import {
   deleteDurations,
   getUnsentDurations,
@@ -7,8 +7,8 @@ import {
 import { getCurrentPath, getVisitorId } from "./utils";
 import { ApiClient } from "./api-client";
 
-export class ImmedioTracker {
-  private config: Required<ImmedioConfig>;
+export class AnalyticsTracker {
+  private config: Required<TrackerConfig>;
   private apiClient: ApiClient;
   private visitorId: string;
   private flushTimer: ReturnType<typeof setInterval> | null = null;
@@ -16,7 +16,7 @@ export class ImmedioTracker {
   private pathStartTime: number | null = null;
   private isInitialized = false;
 
-  constructor(config: ImmedioConfig) {
+  constructor(config: TrackerConfig) {
     this.config = {
       flushInterval: 30000, // 30 seconds
       ...config,

@@ -1,4 +1,4 @@
-# Immedio Lead Analytics SDK
+# Visitor Analytics SDK
 
 Web SDK for tracking visitor path duration.
 
@@ -13,13 +13,13 @@ Web SDK for tracking visitor path duration.
 ## Installation
 
 ```bash
-bun add @immedio/analytics-sdk
+bun add @visitor-analytics/sdk
 ```
 
 ## Quick Start
 
 ```typescript
-import { init } from '@immedio/analytics-sdk';
+import { init } from '@visitor-analytics/sdk';
 
 // Initialize the tracker
 await init({
@@ -31,7 +31,7 @@ await init({
 ## Configuration Options
 
 ```typescript
-interface ImmedioConfig {
+interface TrackerConfig {
   apiEndpoint: string;      // Your API endpoint URL
   apiKey: string;           // Your API key
   flushInterval?: number;   // Interval to flush data in ms (default: 30s)
@@ -82,7 +82,7 @@ The SDK sends data to `{apiEndpoint}/durations` with the following format:
 ### Force Flush
 
 ```typescript
-import { flush } from '@immedio/analytics-sdk';
+import { flush } from '@visitor-analytics/sdk';
 
 // Force send all pending data
 await flush();
@@ -91,7 +91,7 @@ await flush();
 ### Destroy Tracker
 
 ```typescript
-import { destroy } from '@immedio/analytics-sdk';
+import { destroy } from '@visitor-analytics/sdk';
 
 // Clean up and destroy tracker
 destroy();
@@ -100,9 +100,9 @@ destroy();
 ### Using the Tracker Instance
 
 ```typescript
-import { ImmedioTracker } from '@immedio/analytics-sdk';
+import { AnalyticsTracker } from '@visitor-analytics/sdk';
 
-const tracker = new ImmedioTracker({
+const tracker = new AnalyticsTracker({
   apiEndpoint: 'https://api.yourdomain.com',
   apiKey: 'your-api-key',
 });

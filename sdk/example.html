@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Immedio Analytics SDK - Example</title>
+        <title>Visitor Analytics SDK - Example</title>
         <style>
             body {
                 font-family: Arial, sans-serif;
@@ -46,12 +46,12 @@
         </style>
     </head>
     <body>
-        <h1>Immedio Analytics SDK - Example</h1>
+        <h1>Visitor Analytics SDK - Example</h1>
 
         <div class="info">
             <h2>About This Example</h2>
             <p>
-                This page demonstrates the Immedio Analytics SDK tracking
+                This page demonstrates the Visitor Analytics SDK tracking
                 visitor path duration.
             </p>
             <p>The SDK automatically tracks how long you stay on this path.</p>
@@ -78,13 +78,13 @@
                 const timestamp = new Date().toLocaleTimeString();
                 logElement.innerHTML += `[${timestamp}] ${message}<br>`;
                 logElement.scrollTop = logElement.scrollHeight;
-                console.log(`[Immedio SDK] ${message}`);
+                console.log(`[Analytics SDK] ${message}`);
             };
 
             // Initialize the SDK
             (async () => {
                 try {
-                    log("Initializing Immedio Analytics SDK...");
+                    log("Initializing Visitor Analytics SDK...");
 
                     await init({
                         apiEndpoint: "http://localhost:3000/api",

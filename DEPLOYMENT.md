@@ -1,6 +1,6 @@
-# Deployment Guide for Immedio Lead Analytics
+# Deployment Guide for Visitor Analytics Visitor Analytics
 
-This guide covers deploying the Immedio Lead Analytics system to Vercel.
+This guide covers deploying the Visitor Analytics Visitor Analytics system to Vercel.
 
 ## Overview
 
@@ -30,9 +30,9 @@ Set these environment variables in your Vercel project settings:
 
 | Variable | Description | Example |
 |----------|-------------|---------|
-| `IMMEDIO_API_ENDPOINT` | Console app API URL | `https://your-console.vercel.app/api` |
-| `IMMEDIO_API_KEY` | Must match console's API_KEY | `your-secure-random-key-123` |
-| `IMMEDIO_FLUSH_INTERVAL` | Data send interval (ms) | `10000` |
+| `ANALYTICS_API_ENDPOINT` | Console app API URL | `https://your-console.vercel.app/api` |
+| `ANALYTICS_API_KEY` | Must match console's API_KEY | `your-secure-random-key-123` |
+| `ANALYTICS_FLUSH_INTERVAL` | Data send interval (ms) | `10000` |
 
 ## Deployment Steps
 
@@ -47,7 +47,7 @@ When prompted:
 - Set up and deploy: Yes
 - Which scope: Select your account
 - Link to existing project: No (first time)
-- Project name: immedio-console (or your choice)
+- Project name: visitor-analytics-console (or your choice)
 - Directory: `./` (current directory)
 - Override settings: No
 
@@ -57,7 +57,7 @@ After deployment, add environment variables in Vercel dashboard:
 3. Add `API_KEY` and `FIRECRAWL_API_KEY`
 4. Redeploy to apply changes
 
-Note the deployment URL (e.g., `https://immedio-console.vercel.app`)
+Note the deployment URL (e.g., `https://visitor-analytics-console.vercel.app`)
 
 ### 2. Build SDK
 
@@ -79,7 +79,7 @@ When prompted:
 - Set up and deploy: Yes
 - Which scope: Select your account
 - Link to existing project: No (first time)
-- Project name: immedio-sample-site (or your choice)
+- Project name: visitor-analytics-sample-site (or your choice)
 - Directory: `./` (current directory)
 - Override settings: No
 
@@ -87,9 +87,9 @@ After deployment, add environment variables in Vercel dashboard:
 1. Go to your project settings
 2. Navigate to "Environment Variables"
 3. Add:
-   - `IMMEDIO_API_ENDPOINT`: Your console app URL + `/api` (e.g., `https://immedio-console.vercel.app/api`)
-   - `IMMEDIO_API_KEY`: Same value as console's `API_KEY`
-   - `IMMEDIO_FLUSH_INTERVAL`: `10000` (or your preferred interval)
+   - `ANALYTICS_API_ENDPOINT`: Your console app URL + `/api` (e.g., `https://visitor-analytics-console.vercel.app/api`)
+   - `ANALYTICS_API_KEY`: Same value as console's `API_KEY`
+   - `ANALYTICS_FLUSH_INTERVAL`: `10000` (or your preferred interval)
 
 ### 4. Configure Build Settings
 
@@ -121,9 +121,9 @@ bun run dev
 ```bash
 cd sample-site
 # Set environment variables
-export IMMEDIO_API_ENDPOINT="http://localhost:3000/api"
-export IMMEDIO_API_KEY="demo-api-key"
-export IMMEDIO_FLUSH_INTERVAL="10000"
+export ANALYTICS_API_ENDPOINT="http://localhost:3000/api"
+export ANALYTICS_API_KEY="demo-api-key"
+export ANALYTICS_FLUSH_INTERVAL="10000"
 
 bun run dev
 ```
@@ -152,8 +152,8 @@ To migrate to a different database, update `console/db/index.ts` and `console/dr
 ### Sample Site: SDK not sending data
 
 1. Check browser console for errors
-2. Verify `IMMEDIO_API_ENDPOINT` matches your console URL
-3. Verify `IMMEDIO_API_KEY` matches console's `API_KEY`
+2. Verify `ANALYTICS_API_ENDPOINT` matches your console URL
+3. Verify `ANALYTICS_API_KEY` matches console's `API_KEY`
 4. Check CORS settings in console API routes
 
 ### Console: API authentication errors

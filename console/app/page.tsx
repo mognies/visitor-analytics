@@ -121,7 +121,7 @@ export default function Home() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                Immedio Analytics
+                Visitor Analytics
               </h1>
               <p className="mt-1 text-sm text-slate-600">
                 Customer interest analytics based on page visit duration
