@@ -42,6 +42,7 @@ export async function POST(request: NextRequest) {
     // Crawl the website
     const crawlJob = await app.crawl(url, {
       limit: maxPages,
+      crawlEntireDomain: true,
       scrapeOptions: {
         formats: ["summary"],
       },
