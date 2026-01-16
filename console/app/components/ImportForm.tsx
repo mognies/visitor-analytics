@@ -34,9 +34,11 @@ export default function ImportForm({ onImportComplete }: ImportFormProps) {
         throw new Error(data.error || "Failed to import pages");
       }
 
-      setSuccess(`Successfully imported ${data.count} pages`);
+      setSuccess(
+        data.message ||
+          "Crawl job started. Pages will be imported in the background. Reload the page after a few minutes to see the results.",
+      );
       setUrl("");
-      onImportComplete();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unknown error");
     } finally {
