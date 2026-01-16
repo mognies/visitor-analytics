@@ -6,12 +6,9 @@
   "description": "Web SDK for tracking visitor page history and analyzing customer interests",
   "module": "dist/index.js",
   "main": "dist/index.js",
-  "types": "dist/index.d.ts",
   "type": "module",
-  "private": true,
   "scripts": {
-    "build": "bun build ./index.ts --outdir ./dist --target browser --format esm --minify && bun run build:types",
-    "build:types": "tsc --declaration --emitDeclarationOnly --outDir dist",
+    "build": "bun build ./index.ts --outdir ./dist --target browser --format esm --minify",
     "dev": "bun build ./index.ts --outdir ./dist --target browser --format esm --watch",
     "typecheck": "tsc --noEmit"
   },

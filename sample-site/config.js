@@ -4,3 +4,6 @@ export const config = {
   apiKey: window.ANALYTICS_API_KEY || "demo-api-key",
   flushInterval: parseInt(window.ANALYTICS_FLUSH_INTERVAL || "10000", 10),
 };
+
+// SDK source URL (can be CDN or local)
+export const sdkUrl = window.ANALYTICS_SDK_URL || "../sdk/dist/index.js";

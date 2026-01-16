@@ -175,14 +175,16 @@
         <!-- Analytics Analytics SDK -->
         <script src="env.js"></script>
         <script type="module">
-            import { init } from "../sdk/dist/index.js";
-            import { config } from "./config.js";
+            import { config, sdkUrl } from "./config.js";
 
+            // Dynamically import SDK from configured URL
+            const { init } = await import(sdkUrl);
             await init(config);
 
             console.log("Analytics Analytics SDK initialized with config:", {
                 apiEndpoint: config.apiEndpoint,
                 flushInterval: config.flushInterval,
+                sdkUrl: sdkUrl,
             });
         </script>
     </body>
