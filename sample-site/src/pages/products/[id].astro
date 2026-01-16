@@ -1,0 +1,194 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { products } from '../../data/products';
+
+export function getStaticPaths() {
+  return products.map((product) => ({
+    params: { id: product.id },
+    props: { product },
+  }));
+}
+
+const { product } = Astro.props;
+---
+
+<Layout title={`${product.name} - ShopDemo`} description={product.description}>
+  <style>
+    .hero {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 4rem 2rem;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+    .product-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      margin-bottom: 4rem;
+    }
+    .product-image {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      border-radius: 20px;
+      height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+    }
+    .product-info h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: #2d3748;
+    }
+    .category {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background: #e6fffa;
+      color: #234e52;
+      border-radius: 20px;
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+    }
+    .price {
+      font-size: 3rem;
+      font-weight: bold;
+      color: #667eea;
+      margin: 1.5rem 0;
+    }
+    .description {
+      font-size: 1.125rem;
+      line-height: 1.8;
+      color: #4a5568;
+      margin-bottom: 2rem;
+    }
+    .cta-button {
+      display: inline-block;
+      padding: 1rem 2.5rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: bold;
+      font-size: 1.125rem;
+      transition: transform 0.3s;
+    }
+    .cta-button:hover {
+      transform: translateY(-2px);
+    }
+    .section {
+      margin-bottom: 4rem;
+    }
+    .section h2 {
+      font-size: 2rem;
+      color: #2d3748;
+      margin-bottom: 1.5rem;
+    }
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    .feature {
+      padding: 1.5rem;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      border-left: 4px solid #667eea;
+    }
+    .feature::before {
+      content: "✓";
+      color: #667eea;
+      font-weight: bold;
+      font-size: 1.5rem;
+      margin-right: 0.5rem;
+    }
+    .specifications {
+      background: white;
+      border-radius: 10px;
+      padding: 2rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .spec-row {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 2rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .spec-row:last-child {
+      border-bottom: none;
+    }
+    .spec-label {
+      font-weight: bold;
+      color: #667eea;
+    }
+    .spec-value {
+      color: #4a5568;
+    }
+    .back-link {
+      display: inline-block;
+      margin-bottom: 2rem;
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .back-link:hover {
+      text-decoration: underline;
+    }
+    @media (max-width: 768px) {
+      .product-header {
+        grid-template-columns: 1fr;
+      }
+      .spec-row {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+      }
+    }
+  </style>
+
+  <div class="hero">
+    <div class="container">
+      <a href="/products" class="back-link">← Back to Products</a>
+      <span class="category">{product.category}</span>
+      <h1>{product.name}</h1>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="product-header">
+      <div class="product-image">
+        🎧
+      </div>
+      <div class="product-info">
+        <p class="price">${product.price}</p>
+        <p class="description">{product.description}</p>
+        <a href="/contact" class="cta-button">Buy Now</a>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Key Features</h2>
+      <div class="features">
+        {product.features.map((feature) => (
+          <div class="feature">{feature}</div>
+        ))}
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Specifications</h2>
+      <div class="specifications">
+        {Object.entries(product.specifications).map(([key, value]) => (
+          <div class="spec-row">
+            <div class="spec-label">{key}</div>
+            <div class="spec-value">{value}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</Layout>

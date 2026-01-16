@@ -1,47 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
-
-const caseStudies = [
-  {
-    company: "TechCorp Inc.",
-    industry: "Technology",
-    result: "300% increase in conversions",
-    description: "How TechCorp leveraged our analytics to triple their online sales.",
-  },
-  {
-    company: "Fashion Forward",
-    industry: "Retail",
-    result: "50% reduction in cart abandonment",
-    description: "Strategic insights helped optimize the checkout experience.",
-  },
-  {
-    company: "Global Ventures",
-    industry: "Finance",
-    result: "2x customer retention",
-    description: "Data-driven personalization doubled customer lifetime value.",
-  },
-  {
-    company: "HealthPlus",
-    industry: "Healthcare",
-    result: "40% faster time to market",
-    description: "Analytics accelerated product development and launch cycles.",
-  },
-  {
-    company: "EduLearn",
-    industry: "Education",
-    result: "85% user satisfaction",
-    description: "Understanding learner behavior transformed course engagement.",
-  },
-  {
-    company: "GreenEarth",
-    industry: "Sustainability",
-    result: "$2M revenue growth",
-    description: "Targeted campaigns based on visitor insights drove massive growth.",
-  },
-];
+import { caseStudies } from '../data/case-studies';
 ---
 
-<Layout title="Case Studies - ShopDemo">
+<Layout title="Case Studies - ShopDemo" description="Real results from real businesses using our analytics platform">
   <style>
     .hero {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -66,6 +28,9 @@ const caseStudies = [
       padding: 2rem;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       transition: all 0.3s;
+      text-decoration: none;
+      color: inherit;
+      display: block;
     }
     .case-study:hover {
       transform: translateY(-5px);
@@ -96,6 +61,16 @@ const caseStudies = [
       color: #4a5568;
       line-height: 1.6;
     }
+    .read-more {
+      display: inline-block;
+      margin-top: 1rem;
+      color: #667eea;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    .read-more::after {
+      content: " →";
+    }
     .cta {
       margin-top: 4rem;
       text-align: center;
@@ -125,19 +100,20 @@ const caseStudies = [
 
   <div class="hero">
     <h1>Success Stories</h1>
-    <p>Real results from real businesses</p>
+    <p>Real results from real businesses using our analytics platform</p>
   </div>
 
   <div class="container">
     <h2>Featured Case Studies</h2>
     <div class="case-studies">
       {caseStudies.map((study) => (
-        <div class="case-study">
+        <a href={`/case-studies/${study.id}`} class="case-study">
           <div class="company">{study.company}</div>
           <span class="industry">{study.industry}</span>
           <div class="result">{study.result}</div>
           <p class="description">{study.description}</p>
-        </div>
+          <span class="read-more">Read Full Story</span>
+        </a>
       ))}
     </div>
 

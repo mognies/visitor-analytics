@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     if (!visitorId || !paths || paths.length === 0) {
       return NextResponse.json(
         { error: "visitorId and paths are required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     if (!apiKey) {
       return NextResponse.json(
         { error: "GOOGLE_GENERATIVE_AI_API_KEY not configured" },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
 
     // Create a map of path -> page info
     const pageInfoMap = new Map(
-      pageInfos.map((p) => [p.path, { title: p.title, summary: p.summary }])
+      pageInfos.map((p) => [p.path, { title: p.title, summary: p.summary }]),
     );
 
     // Group paths by date and calculate total duration per page
@@ -87,8 +87,6 @@ export async function POST(request: NextRequest) {
 
     // Build prompt
     let prompt = `Analyze the following visitor's behavior and determine their intent based on their browsing patterns.
-
-Visitor ID: ${visitorId}
 
 ## Visit History by Date:
 
@@ -131,7 +129,7 @@ Based on this data, please:
 3. Highlight key interests based on pages visited and time spent
 4. Suggest what actions or content might be most relevant to them
 
-Provide a concise analysis (2-3 paragraphs) that would help understand this visitor's intent.`;
+Provide a concise analysis in Japanese (2-3 paragraphs) that would help understand this visitor's intent.`;
 
     // Generate analysis using Gemini
     const { text } = await generateText({
@@ -151,7 +149,7 @@ Provide a concise analysis (2-3 paragraphs) that would help understand this visi
         error: "Failed to analyze intent",
         message: error instanceof Error ? error.message : "Unknown error",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

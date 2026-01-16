@@ -1,17 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
-
-const products = [
-  { name: "Premium Headphones", price: 299, category: "Electronics" },
-  { name: "Smart Watch Pro", price: 449, category: "Electronics" },
-  { name: "Wireless Keyboard", price: 129, category: "Accessories" },
-  { name: "4K Monitor", price: 599, category: "Electronics" },
-  { name: "Gaming Mouse", price: 79, category: "Accessories" },
-  { name: "Laptop Stand", price: 49, category: "Accessories" },
-];
+import { products } from '../data/products';
 ---
 
-<Layout title="Products - ShopDemo">
+<Layout title="Products - ShopDemo" description="Discover our amazing collection of high-quality products">
   <style>
     .hero {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -26,7 +18,7 @@ const products = [
     }
     .products {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: 2rem;
       margin-top: 2rem;
     }
@@ -35,17 +27,22 @@ const products = [
       border-radius: 10px;
       padding: 2rem;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s;
+      transition: all 0.3s;
+      text-decoration: none;
+      color: inherit;
+      display: block;
     }
     .product:hover {
       transform: translateY(-5px);
+      box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
     }
     .product h3 {
       color: #667eea;
       margin-bottom: 0.5rem;
+      font-size: 1.25rem;
     }
     .price {
-      font-size: 1.5rem;
+      font-size: 1.75rem;
       font-weight: bold;
       color: #2d3748;
       margin: 1rem 0;
@@ -57,24 +54,42 @@ const products = [
       color: #234e52;
       border-radius: 20px;
       font-size: 0.875rem;
+      margin-bottom: 1rem;
+    }
+    .description {
+      color: #4a5568;
+      line-height: 1.6;
+      margin-top: 1rem;
+      font-size: 0.95rem;
+    }
+    .view-details {
+      display: inline-block;
+      margin-top: 1rem;
+      color: #667eea;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    .view-details::after {
+      content: " →";
     }
   </style>
 
   <div class="hero">
     <h1>Our Products</h1>
-    <p>Discover our amazing collection</p>
+    <p>Discover our amazing collection of high-quality products</p>
   </div>
 
   <div class="container">
     <h2>Featured Products</h2>
     <div class="products">
       {products.map((product) => (
-        <div class="product">
+        <a href={`/products/${product.id}`} class="product">
           <span class="category">{product.category}</span>
           <h3>{product.name}</h3>
           <p class="price">${product.price}</p>
-          <p>High quality product with excellent reviews</p>
-        </div>
+          <p class="description">{product.description.substring(0, 120)}...</p>
+          <span class="view-details">View Details</span>
+        </a>
       ))}
     </div>
   </div>
