@@ -129,7 +129,8 @@ export async function POST(request: NextRequest) {
 3. 訪問ページと滞在時間から主な関心事を明らかにする
 4. この訪問者に最も関連性の高いアクションやコンテンツを提案する
 
-この訪問者の意図を理解するのに役立つ、簡潔な分析を日本語で2-3段落で提供してください。`;
+この訪問者の意図を理解するのに役立つ、簡潔な分析を日本語で2-3段落で提供してください。
+返事は不要で、分析結果のみを返してください。`;
 
     // Generate analysis using Gemini
     const { text } = await generateText({
