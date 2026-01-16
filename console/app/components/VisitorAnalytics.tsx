@@ -28,6 +28,8 @@ export default function VisitorAnalytics() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedVisitor, setSelectedVisitor] = useState<Visitor | null>(null);
+  const [analyzingIntent, setAnalyzingIntent] = useState(false);
+  const [intentAnalysis, setIntentAnalysis] = useState<string | null>(null);
 
   const fetchData = async () => {
     try {
@@ -78,6 +80,25 @@ export default function VisitorAnalytics() {
     if (hours > 0) return `${hours}h ago`;
     if (minutes > 0) return `${minutes}m ago`;
     return `${seconds}s ago`;
+  };
+
+  const handleAnalyzeIntent = async () => {
+    if (!selectedVisitor) return;
+
+    setAnalyzingIntent(true);
+    setIntentAnalysis(null);
+
+    try {
+      // TODO: Call AI API to analyze intent
+      // Simulate API call for now
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      setIntentAnalysis("Analysis will be implemented in the next step.");
+    } catch (error) {
+      console.error("Failed to analyze intent:", error);
+      setIntentAnalysis(null);
+    } finally {
+      setAnalyzingIntent(false);
+    }
   };
 
   if (loading) {
@@ -410,6 +431,131 @@ export default function VisitorAnalytics() {
                     Avg per Page
                   </div>
                 </div>
+              </div>
+
+              {/* AI Intent Analysis */}
+              <div className="bg-white rounded-xl shadow p-6 border border-slate-200">
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="text-sm font-bold text-slate-900 flex items-center">
+                    <svg
+                      className="w-5 h-5 mr-2 text-purple-600"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                      />
+                    </svg>
+                    AI Intent Analysis
+                  </h4>
+                  <button
+                    onClick={handleAnalyzeIntent}
+                    disabled={analyzingIntent}
+                    className={`px-4 py-2 rounded-lg font-medium text-sm transition-all ${
+                      analyzingIntent
+                        ? "bg-slate-100 text-slate-400 cursor-not-allowed"
+                        : "bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700 shadow-lg hover:shadow-xl transform hover:scale-105"
+                    }`}
+                  >
+                    {analyzingIntent ? (
+                      <span className="flex items-center">
+                        <svg
+                          className="animate-spin -ml-1 mr-2 h-4 w-4"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          ></circle>
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          ></path>
+                        </svg>
+                        Analyzing...
+                      </span>
+                    ) : (
+                      <span className="flex items-center">
+                        <svg
+                          className="w-4 h-4 mr-2"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M13 10V3L4 14h7v7l9-11h-7z"
+                          />
+                        </svg>
+                        Analyze Intent
+                      </span>
+                    )}
+                  </button>
+                </div>
+
+                {intentAnalysis ? (
+                  <div className="mt-4 p-4 bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-lg">
+                    <div className="flex items-start space-x-3">
+                      <div className="flex-shrink-0">
+                        <svg
+                          className="w-6 h-6 text-purple-600"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                          />
+                        </svg>
+                      </div>
+                      <div className="flex-1">
+                        <h5 className="text-sm font-semibold text-slate-900 mb-2">
+                          Visitor Intent
+                        </h5>
+                        <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-wrap">
+                          {intentAnalysis}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="mt-4 p-6 border-2 border-dashed border-slate-200 rounded-lg text-center">
+                    <svg
+                      className="w-12 h-12 mx-auto text-slate-300 mb-3"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                      />
+                    </svg>
+                    <p className="text-sm text-slate-500 font-medium">
+                      Click "Analyze Intent" to understand visitor behavior
+                    </p>
+                    <p className="text-xs text-slate-400 mt-1">
+                      AI will analyze the visit timeline to identify patterns and intent
+                    </p>
+                  </div>
+                )}
               </div>
 
               {/* Visit Timeline */}
