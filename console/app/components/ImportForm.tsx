@@ -12,12 +12,15 @@ export default function ImportForm({ onImportComplete }: ImportFormProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [jobId, setJobId] = useState<string | null>(null);
+  const [checkingStatus, setCheckingStatus] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     setError(null);
     setSuccess(null);
+    setJobId(null);
 
     try {
       const response = await fetch("/api/import", {
@@ -34,15 +37,51 @@ export default function ImportForm({ onImportComplete }: ImportFormProps) {
         throw new Error(data.error || "Failed to import pages");
       }
 
+      setJobId(data.jobId);
       setSuccess(
         data.message ||
-          "Crawl job started. Pages will be imported in the background. Reload the page after a few minutes to see the results.",
+          "Crawl job started. Click 'Check Status' to import data when ready.",
       );
       setUrl("");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unknown error");
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function handleCheckStatus() {
+    if (!jobId) return;
+
+    setCheckingStatus(true);
+    setError(null);
+
+    try {
+      const response = await fetch(`/api/import/status/${jobId}`);
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to check status");
+      }
+
+      if (data.status === "completed") {
+        setSuccess(
+          `Successfully imported ${data.imported || 0} pages! Refresh the page to see them.`,
+        );
+        setJobId(null);
+        onImportComplete();
+      } else if (data.status === "failed") {
+        setError("Crawl job failed");
+        setJobId(null);
+      } else {
+        setSuccess(
+          `Crawling in progress: ${data.completed || 0}/${data.total || "?"} pages. Click again to check status.`,
+        );
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Unknown error");
+    } finally {
+      setCheckingStatus(false);
     }
   }
 
@@ -226,7 +265,7 @@ export default function ImportForm({ onImportComplete }: ImportFormProps) {
                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                 ></path>
               </svg>
-              <span>Importing...</span>
+              <span>Starting...</span>
             </>
           ) : (
             <>
@@ -243,10 +282,61 @@ export default function ImportForm({ onImportComplete }: ImportFormProps) {
                   d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
                 />
               </svg>
-              <span>Import Pages</span>
+              <span>Start Crawl</span>
             </>
           )}
         </button>
+
+        {jobId && (
+          <button
+            type="button"
+            onClick={handleCheckStatus}
+            disabled={checkingStatus}
+            className="w-full flex justify-center items-center space-x-2 py-3 px-4 border border-transparent rounded-xl shadow-lg text-sm font-semibold text-white bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed transform transition-all hover:scale-[1.02] active:scale-[0.98]"
+          >
+            {checkingStatus ? (
+              <>
+                <svg
+                  className="animate-spin h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                <span>Checking...</span>
+              </>
+            ) : (
+              <>
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                  />
+                </svg>
+                <span>Check Status & Import</span>
+              </>
+            )}
+          </button>
+        )}
       </form>
     </div>
   );

@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
       limit: maxPages,
       crawlEntireDomain: true,
       scrapeOptions: {
-        formats: ["summary"],
+        formats: ["summary", "html"],
       },
       webhook: webhookUrl,
     });
@@ -60,7 +60,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       jobId: crawlResponse.id,
-      message: "Crawl job started. Data will be imported automatically when complete.",
+      message:
+        "Crawl job started. Data will be imported automatically when complete.",
     });
   } catch (error) {
     console.error("Error starting crawl job:", error);
