@@ -10,7 +10,10 @@ const { title, description = "Welcome to our sample e-commerce site showcasing a
 const apiEndpoint = import.meta.env.PUBLIC_ANALYTICS_API_ENDPOINT || "http://localhost:3000/api";
 const apiKey = import.meta.env.PUBLIC_ANALYTICS_API_KEY || "demo-api-key";
 const flushInterval = import.meta.env.PUBLIC_ANALYTICS_FLUSH_INTERVAL || "10000";
-const sdkUrl = import.meta.env.PUBLIC_ANALYTICS_SDK_URL || "../sdk/dist/analytics-sdk.js";
+// For production, use /analytics-sdk.js (served from same domain)
+// For local dev, use relative path to SDK build output
+const sdkUrl = import.meta.env.PUBLIC_ANALYTICS_SDK_URL ||
+  (import.meta.env.DEV ? "../sdk/dist/analytics-sdk.js" : "/analytics-sdk.js");
 ---
 
 <!doctype html>
