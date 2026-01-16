@@ -12,7 +12,7 @@ export async function GET() {
         url: pages.url,
         path: pages.path,
         title: pages.title,
-        description: pages.description,
+        summary: pages.summary,
         importedAt: pages.importedAt,
         baseUrl: pages.baseUrl,
         totalDuration: sql<number>`COALESCE(SUM(${pathDurations.duration}), 0)`.as(

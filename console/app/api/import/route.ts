@@ -7,7 +7,7 @@ interface CrawledPage {
   url: string;
   path: string;
   title: string;
-  description: string;
+  summary: string;
 }
 
 export async function POST(request: NextRequest) {
@@ -64,8 +64,8 @@ export async function POST(request: NextRequest) {
           crawledPages.push({
             url: pageUrl,
             path: parsedUrl.pathname,
-            title: page.metadata?.title || "",
-            description: page.metadata?.description || "",
+            title: (page.metadata?.title as string) || "",
+            summary: (page.metadata?.summary as string) || "",
           });
         } catch (e) {
           console.error(`Invalid URL in crawl results: ${pageUrl}`);
@@ -85,7 +85,7 @@ export async function POST(request: NextRequest) {
           url: page.url,
           path: page.path,
           title: page.title,
-          description: page.description,
+          summary: page.summary,
           baseUrl: baseUrl.origin,
         })),
       )
@@ -93,7 +93,7 @@ export async function POST(request: NextRequest) {
         target: pages.url,
         set: {
           title: pages.title,
-          description: pages.description,
+          summary: pages.summary,
           importedAt: Date.now(),
         },
       });

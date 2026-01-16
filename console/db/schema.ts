@@ -16,7 +16,7 @@ export const pages = sqliteTable("pages", {
   url: text("url").notNull().unique(),
   path: text("path").notNull(),
   title: text("title"),
-  description: text("description"),
+  summary: text("summary"),
   importedAt: integer("imported_at")
     .notNull()
     .$defaultFn(() => Date.now()),

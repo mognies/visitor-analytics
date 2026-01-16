@@ -1,0 +1,1 @@
+ALTER TABLE `pages` RENAME COLUMN "description" TO "summary";
