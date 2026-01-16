@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import ImportForm from "./components/ImportForm";
 import PagesTable from "./components/PagesTable";
+import VisitorAnalytics from "./components/VisitorAnalytics";
 
 interface PathAnalytic {
   path: string;
@@ -42,9 +43,9 @@ export default function Home() {
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<"analytics" | "pages">(
-    "analytics",
-  );
+  const [activeTab, setActiveTab] = useState<
+    "analytics" | "visitors" | "pages"
+  >("analytics");
   const [pagesRefresh, setPagesRefresh] = useState(0);
 
   useEffect(() => {
@@ -165,6 +166,31 @@ export default function Home() {
                 </div>
               </button>
               <button
+                onClick={() => setActiveTab("visitors")}
+                className={`${
+                  activeTab === "visitors"
+                    ? "border-blue-500 text-blue-600"
+                    : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"
+                } whitespace-nowrap py-4 px-1 border-b-2 font-semibold text-sm transition-colors cursor-pointer`}
+              >
+                <div className="flex items-center space-x-2">
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                    />
+                  </svg>
+                  <span>Visitors</span>
+                </div>
+              </button>
+              <button
                 onClick={() => setActiveTab("pages")}
                 className={`${
                   activeTab === "pages"
@@ -193,7 +219,9 @@ export default function Home() {
           </div>
         </div>
 
-        {activeTab === "analytics" ? (
+        {activeTab === "visitors" ? (
+          <VisitorAnalytics />
+        ) : activeTab === "analytics" ? (
           <>
             {/* Stats Cards */}
             {data?.overallStats && (
