@@ -7,6 +7,7 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
+    "prebuild": "mkdir -p public && cp ../sdk/dist/analytics-sdk.js public/analytics-sdk.js",
     "build": "astro build",
     "preview": "astro preview",
     "start": "astro dev"

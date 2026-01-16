@@ -4,3 +4,4 @@ node_modules/
 .vercel
 env.js
 dist/
+public/analytics-sdk.js
