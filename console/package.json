@@ -12,12 +12,15 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^3.0.12",
     "@mendable/firecrawl-js": "^4.11.1",
+    "ai": "^6.0.38",
     "better-sqlite3": "latest",
     "drizzle-orm": "latest",
     "next": "latest",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "zod": "^4.3.5"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.18",

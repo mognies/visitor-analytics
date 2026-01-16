@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import AIInsights from "./AIInsights";
 
 interface VisitorPath {
   path: string;
@@ -410,6 +411,14 @@ export default function VisitorAnalytics() {
                     Avg per Page
                   </div>
                 </div>
+              </div>
+
+              {/* AI Insights */}
+              <div className="mb-6">
+                <AIInsights
+                  mode="visitor"
+                  visitorId={selectedVisitor.visitorId}
+                />
               </div>
 
               {/* Visit Timeline */}

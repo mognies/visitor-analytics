@@ -23,6 +23,7 @@ Set these environment variables in your Vercel project settings:
 |----------|-------------|---------|
 | `API_KEY` | Secret key for SDK authentication | `your-secure-random-key-123` |
 | `FIRECRAWL_API_KEY` | API key from firecrawl.dev | `fc-xxxxxxxxxxxxx` |
+| `OPENAI_API_KEY` | API key from OpenAI for AI insights | `sk-xxxxxxxxxxxxx` |
 
 ### Sample Site
 
@@ -54,7 +55,7 @@ When prompted:
 After deployment, add environment variables in Vercel dashboard:
 1. Go to your project settings
 2. Navigate to "Environment Variables"
-3. Add `API_KEY` and `FIRECRAWL_API_KEY`
+3. Add `API_KEY`, `FIRECRAWL_API_KEY`, and `OPENAI_API_KEY`
 4. Redeploy to apply changes
 
 Note the deployment URL (e.g., `https://visitor-analytics-console.vercel.app`)
