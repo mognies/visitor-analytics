@@ -1,6 +1,8 @@
 {
   "name": "@visitor-analytics/sdk",
   "version": "0.1.0",
+  "private": true,
+  "license": "UNLICENSED",
   "description": "Web SDK for tracking visitor page history and analyzing customer interests",
   "module": "dist/index.js",
   "main": "dist/index.js",

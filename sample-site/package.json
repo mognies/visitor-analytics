@@ -1,6 +1,8 @@
 {
   "name": "visitor-analytics-sample-site",
   "version": "1.0.0",
+  "private": true,
+  "license": "UNLICENSED",
   "description": "Sample website with Visitor Analytics SDK integration",
   "type": "module",
   "scripts": {
