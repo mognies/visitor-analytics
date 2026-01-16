@@ -37,6 +37,8 @@ export default function VisitorAnalytics() {
       const response = await fetch("/api/visitors");
       if (!response.ok) throw new Error("Failed to fetch visitor analytics");
       const result = await response.json();
+      // Sort visitors by lastVisit descending (most recent first)
+      result.visitors.sort((a: Visitor, b: Visitor) => b.lastVisit - a.lastVisit);
       setData(result);
       setError(null);
     } catch (err) {
