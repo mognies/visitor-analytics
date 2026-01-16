@@ -41,6 +41,7 @@ export async function POST(request: NextRequest) {
       crawlEntireDomain: true,
       scrapeOptions: {
         formats: ["summary", "html"],
+        maxAge: 0, // Disable cache - always fetch fresh data
       },
       webhook: webhookUrl,
     });
