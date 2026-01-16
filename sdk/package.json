@@ -1,0 +1,15 @@
+{
+  "name": "sdk",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "dexie": "^4.2.1"
+  }
+}

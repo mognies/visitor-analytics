@@ -1,0 +1,7 @@
+{
+  "dependencies": {},
+  "devDependencies": {
+    "@biomejs/biome": "^2.3.11",
+    "turbo": "^2.7.4"
+  }
+}
