@@ -31,6 +31,7 @@
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
+    "dotenv": "^17.2.3",
     "drizzle-kit": "latest",
     "postcss": "latest",
     "tailwindcss": "latest",
