@@ -1,0 +1,6 @@
+// Configuration loaded from environment variables or defaults
+export const config = {
+  apiEndpoint: window.IMMEDIO_API_ENDPOINT || "http://localhost:3000/api",
+  apiKey: window.IMMEDIO_API_KEY || "demo-api-key",
+  flushInterval: parseInt(window.IMMEDIO_FLUSH_INTERVAL || "10000", 10),
+};

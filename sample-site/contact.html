@@ -197,13 +197,16 @@
   </footer>
 
   <!-- Immedio Analytics SDK -->
+  <script src="env.js"></script>
   <script type="module">
     import { init } from '../sdk/dist/index.js';
+    import { config } from './config.js';
 
-    await init({
-      apiEndpoint: 'http://localhost:3000/api',
-      apiKey: 'demo-api-key',
-      flushInterval: 10000,
+    await init(config);
+
+    console.log("Immedio Analytics SDK initialized with config:", {
+      apiEndpoint: config.apiEndpoint,
+      flushInterval: config.flushInterval,
     });
 
     console.log('Immedio Analytics SDK initialized on Contact page');
