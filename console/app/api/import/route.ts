@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
     const crawlJob = await app.crawl(url, {
       limit: maxPages,
       scrapeOptions: {
-        formats: ["summary"],
+        formats: ["markdown", "html"],
       },
     });
 
@@ -65,9 +65,8 @@ export async function POST(request: NextRequest) {
             url: pageUrl,
             path: parsedUrl.pathname,
             title: (page.metadata?.title as string) || "",
-            summary: page.summary ?? "",
+            summary: (page.metadata?.summary as string) || "",
           });
-          console.log(page.summary);
         } catch (e) {
           console.error(`Invalid URL in crawl results: ${pageUrl}`);
         }
