@@ -7,7 +7,7 @@ interface PageWithAnalytics {
   url: string;
   path: string;
   title: string | null;
-  description: string | null;
+  summary: string | null;
   importedAt: number;
   baseUrl: string;
   totalDuration: number;
@@ -46,6 +46,7 @@ export default function PagesTable({ refresh }: { refresh: number }) {
   const [data, setData] = useState<PagesData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [expandedPageId, setExpandedPageId] = useState<number | null>(null);
 
   useEffect(() => {
     fetchPages();
@@ -173,92 +174,152 @@ export default function PagesTable({ refresh }: { refresh: number }) {
                 </td>
               </tr>
             ) : (
-              data?.pages.map((page) => (
-                <tr
-                  key={page.id}
-                  className="hover:bg-slate-50 transition-colors cursor-pointer"
-                >
-                  <td className="px-6 py-4">
-                    <div className="flex items-start space-x-3">
-                      <div className="flex-shrink-0 mt-1">
-                        <div className="h-8 w-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
-                          <svg
-                            className="h-4 w-4 text-white"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
-                            />
-                          </svg>
-                        </div>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="text-sm font-semibold text-slate-900 truncate">
-                          {page.title || "Untitled"}
-                        </div>
-                        {page.description && (
-                          <div className="text-sm text-slate-500 truncate max-w-md mt-1">
-                            {page.description}
+              data?.pages.map((page) => {
+                const isExpanded = expandedPageId === page.id;
+                return (
+                  <>
+                    <tr
+                      key={page.id}
+                      onClick={() =>
+                        setExpandedPageId(isExpanded ? null : page.id)
+                      }
+                      className={`hover:bg-slate-50 transition-colors cursor-pointer ${
+                        isExpanded ? "bg-blue-50" : ""
+                      }`}
+                    >
+                      <td className="px-6 py-4">
+                        <div className="flex items-start space-x-3">
+                          <div className="flex-shrink-0 mt-1">
+                            <div className="h-8 w-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
+                              <svg
+                                className="h-4 w-4 text-white"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                                />
+                              </svg>
+                            </div>
                           </div>
-                        )}
-                        <div className="text-xs text-slate-400 truncate max-w-md mt-1 flex items-center">
-                          <svg
-                            className="h-3 w-3 mr-1"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
-                            />
-                          </svg>
-                          {page.url}
+                          <div className="flex-1 min-w-0">
+                            <div className="text-sm font-semibold text-slate-900 truncate">
+                              {page.title || "Untitled"}
+                            </div>
+                            {page.summary && !isExpanded && (
+                              <div className="text-sm text-slate-500 truncate max-w-md mt-1">
+                                {page.summary}
+                              </div>
+                            )}
+                            <div className="text-xs text-slate-400 truncate max-w-md mt-1 flex items-center">
+                              <svg
+                                className="h-3 w-3 mr-1"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+                                />
+                              </svg>
+                              {page.url}
+                            </div>
+                          </div>
+                          <div className="flex-shrink-0 ml-4">
+                            <svg
+                              className={`h-5 w-5 text-slate-400 transition-transform ${
+                                isExpanded ? "rotate-180" : ""
+                              }`}
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M19 9l-7 7-7-7"
+                              />
+                            </svg>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="inline-flex items-center px-2.5 py-1 rounded-md text-sm font-medium bg-slate-100 text-slate-700">
-                      {page.path}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-700">
-                    {page.totalDuration > 0 ? (
-                      formatDuration(page.totalDuration)
-                    ) : (
-                      <span className="text-slate-400">-</span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="inline-flex items-center px-2.5 py-1 rounded-md text-sm font-medium bg-slate-100 text-slate-700">
+                          {page.path}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-700">
+                        {page.totalDuration > 0 ? (
+                          formatDuration(page.totalDuration)
+                        ) : (
+                          <span className="text-slate-400">-</span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-700">
+                        {page.avgDuration > 0 ? (
+                          formatDuration(page.avgDuration)
+                        ) : (
+                          <span className="text-slate-400">-</span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                          {page.visitCount || 0}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800">
+                          {page.uniqueVisitors || 0}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
+                        {formatDate(page.importedAt)}
+                      </td>
+                    </tr>
+                    {isExpanded && page.summary && (
+                      <tr key={`${page.id}-expanded`}>
+                        <td colSpan={7} className="px-6 py-4 bg-blue-50">
+                          <div className="bg-white rounded-lg p-4 border border-blue-200">
+                            <div className="flex items-start space-x-3">
+                              <div className="flex-shrink-0">
+                                <svg
+                                  className="h-5 w-5 text-blue-600"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                  />
+                                </svg>
+                              </div>
+                              <div className="flex-1">
+                                <h4 className="text-sm font-semibold text-slate-900 mb-2">
+                                  Summary
+                                </h4>
+                                <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-wrap">
+                                  {page.summary}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
                     )}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-700">
-                    {page.avgDuration > 0 ? (
-                      formatDuration(page.avgDuration)
-                    ) : (
-                      <span className="text-slate-400">-</span>
-                    )}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                      {page.visitCount || 0}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800">
-                      {page.uniqueVisitors || 0}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
-                    {formatDate(page.importedAt)}
-                  </td>
-                </tr>
-              ))
+                  </>
+                );
+              })
             )}
           </tbody>
         </table>
