@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Insert pages into database
-    const insertedPages = await db
+    await db
       .insert(pages)
       .values(
         crawledPages.map((page) => ({
@@ -96,13 +96,11 @@ export async function POST(request: NextRequest) {
           description: pages.description,
           importedAt: Date.now(),
         },
-      })
-      .run();
+      });
 
     return NextResponse.json({
       success: true,
       count: crawledPages.length,
-      changes: insertedPages.changes,
     });
   } catch (error) {
     console.error("Error importing pages:", error);

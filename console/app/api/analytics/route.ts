@@ -6,7 +6,7 @@ import { sql } from "drizzle-orm";
 export async function GET() {
   try {
     // Get path analytics grouped by path
-    const pathAnalytics = db
+    const pathAnalytics = await db
       .select({
         path: pathDurations.path,
         totalDuration: sql<number>`SUM(${pathDurations.duration})`.as(
@@ -22,11 +22,10 @@ export async function GET() {
       })
       .from(pathDurations)
       .groupBy(pathDurations.path)
-      .orderBy(sql`total_duration DESC`)
-      .all();
+      .orderBy(sql`total_duration DESC`);
 
     // Get overall stats
-    const overallStats = db
+    const overallStats = await db
       .select({
         totalVisits: sql<number>`COUNT(*)`.as("total_visits"),
         uniqueVisitors: sql<number>`COUNT(DISTINCT ${pathDurations.visitorId})`.as(
@@ -40,7 +39,7 @@ export async function GET() {
         ),
       })
       .from(pathDurations)
-      .get();
+      .then((rows) => rows[0]);
 
     return NextResponse.json({
       pathAnalytics,

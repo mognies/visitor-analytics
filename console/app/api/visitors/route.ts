@@ -6,7 +6,7 @@ import { sql } from "drizzle-orm";
 export async function GET() {
   try {
     // Get visitor statistics
-    const visitorStats = db
+    const visitorStats = await db
       .select({
         visitorId: pathDurations.visitorId,
         totalDuration: sql<number>`SUM(${pathDurations.duration})`.as(
@@ -25,27 +25,27 @@ export async function GET() {
       })
       .from(pathDurations)
       .groupBy(pathDurations.visitorId)
-      .orderBy(sql`total_duration DESC`)
-      .all();
+      .orderBy(sql`total_duration DESC`);
 
     // Get detailed path data for each visitor
-    const visitorDetails = visitorStats.map((visitor) => {
-      const paths = db
-        .select({
-          path: pathDurations.path,
-          duration: pathDurations.duration,
-          timestamp: pathDurations.timestamp,
-        })
-        .from(pathDurations)
-        .where(sql`${pathDurations.visitorId} = ${visitor.visitorId}`)
-        .orderBy(sql`${pathDurations.timestamp} DESC`)
-        .all();
+    const visitorDetails = await Promise.all(
+      visitorStats.map(async (visitor) => {
+        const paths = await db
+          .select({
+            path: pathDurations.path,
+            duration: pathDurations.duration,
+            timestamp: pathDurations.timestamp,
+          })
+          .from(pathDurations)
+          .where(sql`${pathDurations.visitorId} = ${visitor.visitorId}`)
+          .orderBy(sql`${pathDurations.timestamp} DESC`);
 
-      return {
-        ...visitor,
-        paths,
-      };
-    });
+        return {
+          ...visitor,
+          paths,
+        };
+      }),
+    );
 
     return NextResponse.json({
       visitors: visitorDetails,

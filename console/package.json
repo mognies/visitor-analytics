@@ -15,8 +15,8 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@libsql/client": "^0.17.0",
     "@mendable/firecrawl-js": "^4.11.1",
-    "better-sqlite3": "latest",
     "drizzle-orm": "latest",
     "next": "latest",
     "react": "latest",
@@ -25,7 +25,6 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.18",
-    "@types/better-sqlite3": "latest",
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",

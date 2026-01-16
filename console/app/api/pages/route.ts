@@ -29,8 +29,7 @@ export async function GET() {
       .from(pages)
       .leftJoin(pathDurations, eq(pages.path, pathDurations.path))
       .groupBy(pages.id)
-      .orderBy(sql`total_duration DESC`)
-      .all();
+      .orderBy(sql`total_duration DESC`);
 
     return NextResponse.json({ pages: pagesWithAnalytics });
   } catch (error) {

@@ -5,7 +5,7 @@ Next.js application for analyzing customer interests based on page visit duratio
 ## Features
 
 - 📊 Real-time analytics dashboard
-- 💾 SQLite database with Drizzle ORM
+- 💾 Turso database (libSQL) with Drizzle ORM
 - 📈 Path-based duration tracking
 - 🔄 Auto-refresh every 30 seconds
 - 🎯 Visitor and visit metrics
@@ -22,13 +22,59 @@ bun install
 
 ### Database Setup
 
-Generate and apply database migrations:
+This application uses [Turso](https://turso.tech/) (libSQL) for both development and production.
+
+#### 1. Install Turso CLI
+
+```bash
+# macOS/Linux
+curl -sSfL https://get.tur.so/install.sh | bash
+
+# Or with Homebrew
+brew install tursodatabase/tap/turso
+```
+
+#### 2. Sign up and authenticate
+
+```bash
+turso auth signup
+```
+
+#### 3. Create a database
+
+```bash
+# For production
+turso db create visitor-analytics
+
+# Get credentials
+turso db show visitor-analytics --url
+turso db tokens create visitor-analytics
+```
+
+#### 4. For local development
+
+```bash
+# Start local Turso instance
+turso dev --db-file analytics.db
+# This will output: Database URL: http://127.0.0.1:8080
+```
+
+Add to `.env.local`:
+```env
+# For local development with `turso dev`
+TURSO_DATABASE_URL=http://127.0.0.1:8080
+
+# For production (get from `turso db show`)
+# TURSO_DATABASE_URL=libsql://visitor-analytics-your-name.turso.io
+# TURSO_AUTH_TOKEN=your-auth-token-here
+```
+
+#### 5. Generate and apply migrations
 
 ```bash
 bun run db:generate
+bun run db:migrate
 ```
-
-The SQLite database will be created automatically when you start the server.
 
 ### Development
 
@@ -43,6 +89,14 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 Create a `.env.local` file:
 
 ```env
+# Turso Database Configuration
+# For local development with `turso dev`
+TURSO_DATABASE_URL=http://127.0.0.1:8080
+
+# For production (get from `turso db show` and `turso db tokens create`)
+# TURSO_DATABASE_URL=libsql://visitor-analytics-your-name.turso.io
+# TURSO_AUTH_TOKEN=your-auth-token-here
+
 # API Key for SDK authentication
 API_KEY=your-secret-api-key
 
@@ -50,7 +104,9 @@ API_KEY=your-secret-api-key
 FIRECRAWL_API_KEY=your-firecrawl-api-key
 ```
 
-**Note**: You need a Firecrawl API key to use the page import feature. Sign up at [https://firecrawl.dev](https://firecrawl.dev) to get your API key.
+**Note**:
+- You need a Firecrawl API key to use the page import feature. Sign up at [https://firecrawl.dev](https://firecrawl.dev) to get your API key.
+- For local development, run `turso dev --db-file analytics.db` in a separate terminal before starting the dev server.
 
 ## API Endpoints
 
@@ -170,7 +226,7 @@ Retrieves imported pages with their analytics.
 
 ## Database
 
-Using SQLite with Drizzle ORM for simplicity and performance.
+Using Turso (libSQL) with Drizzle ORM for scalability and edge deployment.
 
 ### Schema
 
@@ -215,7 +271,7 @@ bun run start
 ## Tech Stack
 
 - **Framework**: Next.js 16 (App Router)
-- **Database**: SQLite with Drizzle ORM
+- **Database**: Turso (libSQL) with Drizzle ORM
 - **Styling**: Tailwind CSS 4
 - **Runtime**: Bun
 - **Crawler**: Firecrawl

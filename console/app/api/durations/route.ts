@@ -54,22 +54,19 @@ export async function POST(request: NextRequest) {
     }
 
     // Insert durations into database
-    const insertedDurations = db
-      .insert(pathDurations)
-      .values(
-        durations.map((d) => ({
-          path: d.path,
-          duration: d.duration,
-          timestamp: d.timestamp,
-          visitorId: d.visitorId,
-        })),
-      )
-      .run();
+    await db.insert(pathDurations).values(
+      durations.map((d) => ({
+        path: d.path,
+        duration: d.duration,
+        timestamp: d.timestamp,
+        visitorId: d.visitorId,
+      })),
+    );
 
     return NextResponse.json(
       {
         success: true,
-        count: insertedDurations.changes,
+        count: durations.length,
       },
       {
         headers: { "Access-Control-Allow-Origin": "*" },
