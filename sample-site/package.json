@@ -1,0 +1,14 @@
+{
+  "name": "immedio-sample-site",
+  "version": "1.0.0",
+  "description": "Sample website with Immedio analytics SDK integration",
+  "type": "module",
+  "scripts": {
+    "dev": "bun run server.js",
+    "start": "bun run server.js"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "bun-types": "latest"
+  }
+}

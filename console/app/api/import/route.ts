@@ -1,0 +1,117 @@
+import { NextRequest, NextResponse } from "next/server";
+import { db } from "@/db";
+import { pages } from "@/db/schema";
+import FirecrawlApp, { CrawlStatusResponse } from "@mendable/firecrawl-js";
+
+interface CrawledPage {
+  url: string;
+  path: string;
+  title: string;
+  description: string;
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { url, maxPages = 100 } = body;
+
+    if (!url) {
+      return NextResponse.json({ error: "URL is required" }, { status: 400 });
+    }
+
+    // Validate URL
+    let baseUrl: URL;
+    try {
+      baseUrl = new URL(url);
+    } catch (e) {
+      return NextResponse.json({ error: "Invalid URL" }, { status: 400 });
+    }
+
+    // Check for Firecrawl API key
+    const apiKey = process.env.FIRECRAWL_API_KEY;
+    if (!apiKey) {
+      return NextResponse.json(
+        { error: "FIRECRAWL_API_KEY not configured" },
+        { status: 500 },
+      );
+    }
+
+    // Initialize Firecrawl
+    const app = new FirecrawlApp({ apiKey });
+
+    // Crawl the website
+    const crawlResponse = await app.crawlUrl(url, {
+      limit: maxPages,
+      scrapeOptions: {
+        formats: ["markdown", "html"],
+      },
+    });
+
+    if (!crawlResponse.success) {
+      throw new Error("Failed to crawl website");
+    }
+
+    // Process crawled pages
+    const crawledPages: CrawledPage[] = [];
+
+    if (crawlResponse.data) {
+      for (const page of crawlResponse.data) {
+        const pageUrl = page.metadata?.sourceURL || "";
+        if (!pageUrl) continue;
+
+        try {
+          const parsedUrl = new URL(pageUrl);
+          crawledPages.push({
+            url: pageUrl,
+            path: parsedUrl.pathname,
+            title: page.metadata?.title || "",
+            description: page.metadata?.description || "",
+          });
+        } catch (e) {
+          console.error(`Invalid URL in crawl results: ${pageUrl}`);
+        }
+      }
+    }
+
+    if (crawledPages.length === 0) {
+      return NextResponse.json({ error: "No pages found" }, { status: 400 });
+    }
+
+    // Insert pages into database
+    const insertedPages = await db
+      .insert(pages)
+      .values(
+        crawledPages.map((page) => ({
+          url: page.url,
+          path: page.path,
+          title: page.title,
+          description: page.description,
+          baseUrl: baseUrl.origin,
+        })),
+      )
+      .onConflictDoUpdate({
+        target: pages.url,
+        set: {
+          title: pages.title,
+          description: pages.description,
+          importedAt: Date.now(),
+        },
+      })
+      .run();
+
+    return NextResponse.json({
+      success: true,
+      count: crawledPages.length,
+      changes: insertedPages.changes,
+    });
+  } catch (error) {
+    console.error("Error importing pages:", error);
+    return NextResponse.json(
+      {
+        error: "Internal server error",
+        message: error instanceof Error ? error.message : "Unknown error",
+      },
+      { status: 500 },
+    );
+  }
+}

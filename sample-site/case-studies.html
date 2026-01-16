@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Studies - Sample E-Commerce Site</title>
+  <meta name="description" content="Success stories and customer case studies">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: #f7fafc;
+    }
+    .navbar {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: white;
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.3s;
+    }
+    .nav-links a:hover {
+      opacity: 0.8;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+    .page-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    .page-header h1 {
+      color: #2d3748;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    .page-header p {
+      color: #718096;
+      font-size: 1.2rem;
+    }
+    .case-studies-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+    .case-study-card {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+    .case-study-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 30px rgba(0,0,0,0.15);
+    }
+    .case-study-image {
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      position: relative;
+    }
+    .case-tag {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: rgba(255,255,255,0.9);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: #667eea;
+    }
+    .case-study-content {
+      padding: 2rem;
+    }
+    .company-name {
+      color: #667eea;
+      font-weight: bold;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+    .case-study-content h3 {
+      color: #2d3748;
+      margin-bottom: 1rem;
+      font-size: 1.3rem;
+    }
+    .case-study-content p {
+      color: #4a5568;
+      margin-bottom: 1.5rem;
+    }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e2e8f0;
+    }
+    .metric {
+      text-align: center;
+    }
+    .metric-value {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #667eea;
+    }
+    .metric-label {
+      font-size: 0.8rem;
+      color: #718096;
+      margin-top: 0.25rem;
+    }
+    .cta-section {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 3rem;
+      border-radius: 10px;
+      text-align: center;
+    }
+    .cta-section h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    .cta-section p {
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+    }
+    .btn {
+      display: inline-block;
+      padding: 1rem 2rem;
+      background: white;
+      color: #667eea;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: bold;
+      transition: transform 0.3s;
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+    footer {
+      background: #2d3748;
+      color: white;
+      text-align: center;
+      padding: 2rem;
+      margin-top: 4rem;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="/" class="logo">🛍️ ShopDemo</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="case-studies.html">Case Studies</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="page-header">
+      <h1>Customer Success Stories</h1>
+      <p>See how our customers are achieving amazing results</p>
+    </div>
+
+    <div class="case-studies-grid">
+      <div class="case-study-card">
+        <div class="case-study-image">
+          🏢
+          <span class="case-tag">Enterprise</span>
+        </div>
+        <div class="case-study-content">
+          <div class="company-name">TechCorp Inc.</div>
+          <h3>Scaling Operations with Smart Analytics</h3>
+          <p>Learn how TechCorp transformed their business operations using data-driven insights and analytics tracking.</p>
+          <div class="metrics">
+            <div class="metric">
+              <div class="metric-value">300%</div>
+              <div class="metric-label">Growth</div>
+            </div>
+            <div class="metric">
+              <div class="metric-value">$2M</div>
+              <div class="metric-label">Revenue</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="case-study-card">
+        <div class="case-study-image">
+          🛒
+          <span class="case-tag">E-Commerce</span>
+        </div>
+        <div class="case-study-content">
+          <div class="company-name">StyleShop</div>
+          <h3>Boosting Conversion Rates by 45%</h3>
+          <p>Discover how StyleShop used visitor analytics to optimize their shopping experience and increase sales.</p>
+          <div class="metrics">
+            <div class="metric">
+              <div class="metric-value">45%</div>
+              <div class="metric-label">Conversion</div>
+            </div>
+            <div class="metric">
+              <div class="metric-value">2.5x</div>
+              <div class="metric-label">ROI</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="case-study-card">
+        <div class="case-study-image">
+          📱
+          <span class="case-tag">SaaS</span>
+        </div>
+        <div class="case-study-content">
+          <div class="company-name">CloudApp Solutions</div>
+          <h3>Reducing Churn with Better Insights</h3>
+          <p>How CloudApp reduced customer churn by 60% using behavioral analytics and engagement tracking.</p>
+          <div class="metrics">
+            <div class="metric">
+              <div class="metric-value">60%</div>
+              <div class="metric-label">Less Churn</div>
+            </div>
+            <div class="metric">
+              <div class="metric-value">85%</div>
+              <div class="metric-label">Retention</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="case-study-card">
+        <div class="case-study-image">
+          🎓
+          <span class="case-tag">Education</span>
+        </div>
+        <div class="case-study-content">
+          <div class="company-name">EduTech Platform</div>
+          <h3>Improving Student Engagement by 200%</h3>
+          <p>See how EduTech doubled student engagement using detailed learning analytics and insights.</p>
+          <div class="metrics">
+            <div class="metric">
+              <div class="metric-value">200%</div>
+              <div class="metric-label">Engagement</div>
+            </div>
+            <div class="metric">
+              <div class="metric-value">10K+</div>
+              <div class="metric-label">Students</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="case-study-card">
+        <div class="case-study-image">
+          🏥
+          <span class="case-tag">Healthcare</span>
+        </div>
+        <div class="case-study-content">
+          <div class="company-name">HealthCare Plus</div>
+          <h3>Streamlining Patient Experience</h3>
+          <p>How HealthCare Plus improved patient satisfaction scores by tracking and optimizing user journeys.</p>
+          <div class="metrics">
+            <div class="metric">
+              <div class="metric-value">95%</div>
+              <div class="metric-label">Satisfaction</div>
+            </div>
+            <div class="metric">
+              <div class="metric-value">40%</div>
+              <div class="metric-label">Faster</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="case-study-card">
+        <div class="case-study-image">
+          🎮
+          <span class="case-tag">Gaming</span>
+        </div>
+        <div class="case-study-content">
+          <div class="company-name">GameStudio Pro</div>
+          <h3>Maximizing Player Retention</h3>
+          <p>Discover how GameStudio used player behavior analytics to create more engaging gaming experiences.</p>
+          <div class="metrics">
+            <div class="metric">
+              <div class="metric-value">3x</div>
+              <div class="metric-label">Play Time</div>
+            </div>
+            <div class="metric">
+              <div class="metric-value">75%</div>
+              <div class="metric-label">Return Rate</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cta-section">
+      <h2>Ready to Transform Your Business?</h2>
+      <p>Join these successful companies and start your analytics journey today</p>
+      <a href="contact.html" class="btn">Get Started</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 ShopDemo. All rights reserved. | This is a sample site for analytics demonstration.</p>
+  </footer>
+
+  <!-- Immedio Analytics SDK -->
+  <script type="module">
+    import { init } from '../sdk/dist/index.js';
+
+    await init({
+      apiEndpoint: 'http://localhost:3000/api',
+      apiKey: 'demo-api-key',
+      flushInterval: 10000,
+    });
+
+    console.log('Immedio Analytics SDK initialized on Case Studies page');
+  </script>
+</body>
+</html>
