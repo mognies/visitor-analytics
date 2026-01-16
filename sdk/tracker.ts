@@ -46,6 +46,7 @@ export class AnalyticsTracker {
         this.endPathTracking();
         this.flush();
       } else {
+        // Resume tracking when page becomes visible again
         this.startPathTracking();
       }
     });
@@ -64,22 +65,35 @@ export class AnalyticsTracker {
   }
 
   private startPathTracking(): void {
-    this.currentPath = getCurrentPath();
-    this.pathStartTime = Date.now();
+    const currentPath = getCurrentPath();
+
+    // If path changed, end previous tracking
+    if (this.currentPath && this.currentPath !== currentPath) {
+      this.endPathTracking();
+    }
+
+    // Start new tracking only if not already tracking this path
+    if (!this.currentPath || this.currentPath !== currentPath) {
+      this.currentPath = currentPath;
+      this.pathStartTime = Date.now();
+    }
   }
 
   private async endPathTracking(): Promise<void> {
     if (this.currentPath && this.pathStartTime) {
       const duration = Date.now() - this.pathStartTime;
 
-      const pathDuration: PathDuration = {
-        path: this.currentPath,
-        duration,
-        timestamp: Date.now(),
-        visitorId: this.visitorId,
-      };
+      // Only save if duration is at least 1 second
+      if (duration >= 1000) {
+        const pathDuration: PathDuration = {
+          path: this.currentPath,
+          duration,
+          timestamp: this.pathStartTime, // Use start time as timestamp
+          visitorId: this.visitorId,
+        };
 
-      await savePathDuration(pathDuration);
+        await savePathDuration(pathDuration);
+      }
 
       this.currentPath = null;
       this.pathStartTime = null;
@@ -108,8 +122,9 @@ export class AnalyticsTracker {
       clearInterval(this.flushTimer);
     }
 
-    this.flushTimer = setInterval(() => {
-      this.flush();
+    this.flushTimer = setInterval(async () => {
+      // Just flush stored data, don't interrupt current tracking
+      await this.flush();
     }, this.config.flushInterval);
   }
 
