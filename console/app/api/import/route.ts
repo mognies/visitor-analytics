@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
 import { pages } from "@/db/schema";
-import FirecrawlApp, { CrawlStatusResponse } from "@mendable/firecrawl-js";
+import FirecrawlApp from "@mendable/firecrawl-js";
 
 interface CrawledPage {
   url: string;
@@ -40,23 +40,23 @@ export async function POST(request: NextRequest) {
     const app = new FirecrawlApp({ apiKey });
 
     // Crawl the website
-    const crawlResponse = await app.crawlUrl(url, {
+    const crawlJob = await app.crawl(url, {
       limit: maxPages,
       scrapeOptions: {
         formats: ["markdown", "html"],
       },
     });
 
-    if (!crawlResponse.success) {
+    if (crawlJob.status === "failed") {
       throw new Error("Failed to crawl website");
     }
 
     // Process crawled pages
     const crawledPages: CrawledPage[] = [];
 
-    if (crawlResponse.data) {
-      for (const page of crawlResponse.data) {
-        const pageUrl = page.metadata?.sourceURL || "";
+    if (crawlJob.data) {
+      for (const page of crawlJob.data) {
+        const pageUrl = page.metadata?.url || "";
         if (!pageUrl) continue;
 
         try {
