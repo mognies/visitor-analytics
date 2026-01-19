@@ -34,6 +34,18 @@ export const pageBlocks = sqliteTable("page_blocks", {
     .$defaultFn(() => Date.now()),
 });
 
+export const blockDurations = sqliteTable("block_durations", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  blockId: text("block_id").notNull(),
+  path: text("path").notNull(),
+  duration: integer("duration").notNull(), // in milliseconds
+  timestamp: integer("timestamp").notNull(),
+  visitorId: text("visitor_id").notNull(),
+  createdAt: integer("created_at")
+    .notNull()
+    .$defaultFn(() => Date.now()),
+});
+
 export const crawlJobs = sqliteTable("crawl_jobs", {
   id: text("id").primaryKey(), // Firecrawl job ID
   baseUrl: text("base_url").notNull(),
@@ -53,5 +65,7 @@ export type Page = typeof pages.$inferSelect;
 export type NewPage = typeof pages.$inferInsert;
 export type PageBlock = typeof pageBlocks.$inferSelect;
 export type NewPageBlock = typeof pageBlocks.$inferInsert;
+export type BlockDuration = typeof blockDurations.$inferSelect;
+export type NewBlockDuration = typeof blockDurations.$inferInsert;
 export type CrawlJob = typeof crawlJobs.$inferSelect;
 export type NewCrawlJob = typeof crawlJobs.$inferInsert;
