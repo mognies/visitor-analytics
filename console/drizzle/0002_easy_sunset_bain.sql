@@ -1,1 +1,1 @@
-ALTER TABLE `pages` RENAME COLUMN "description" TO "summary";
+ALTER TABLE `pages` RENAME COLUMN "summary" TO "summary";
