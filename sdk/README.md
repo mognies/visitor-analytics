@@ -5,6 +5,7 @@ Web SDK for tracking visitor path duration.
 ## Features
 
 - 📊 Automatic path duration tracking
+- 🧩 Page block visibility duration tracking
 - 💾 Local storage with IndexedDB (via Dexie)
 - 📦 Batch data sending to reduce API calls
 - ⚡ Lightweight and performant
@@ -38,6 +39,15 @@ interface TrackerConfig {
 }
 ```
 
+```typescript
+interface PageBlock {
+  id: number | string;
+  blockName: string;
+  blockSummary: string;
+  blockDom: string; // ID or class name
+}
+```
+
 ## How It Works
 
 1. **Visitor Identification**: Each visitor gets a unique ID stored in localStorage
@@ -45,6 +55,7 @@ interface TrackerConfig {
 3. **Local Storage**: Path durations are stored locally in IndexedDB using Dexie
 4. **Batch Sending**: Data is sent to your API in batches to minimize requests
 5. **Automatic Cleanup**: Successfully sent data is removed from local storage
+6. **Unload Safety**: On page hide/unload, data is sent via `navigator.sendBeacon`
 
 ## Data Format
 
@@ -53,6 +64,19 @@ interface TrackerConfig {
 ```typescript
 interface PathDuration {
   id?: number;
+  path: string;
+  duration: number; // in milliseconds
+  timestamp: number;
+  visitorId: string;
+}
+```
+
+### Block Duration
+
+```typescript
+interface BlockDuration {
+  id?: number;
+  blockId: number | string;
   path: string;
   duration: number; // in milliseconds
   timestamp: number;
@@ -76,6 +100,32 @@ The SDK sends data to `{apiEndpoint}/durations` with the following format:
   ]
 }
 ```
+
+The SDK sends block visibility durations to `{apiEndpoint}/block-durations`:
+
+```json
+{
+  "durations": [
+    {
+      "blockId": 123,
+      "path": "/about",
+      "duration": 2500,
+      "timestamp": 1234567890,
+      "visitorId": "visitor-id"
+    }
+  ]
+}
+```
+
+### Fetching Page Blocks
+
+The SDK fetches blocks from:
+
+```
+{apiEndpoint}/page-blocks?path=/your/path
+```
+
+The response should be a JSON array of `PageBlock`.
 
 ## Advanced Usage
 
@@ -108,6 +158,16 @@ const tracker = new AnalyticsTracker({
 });
 
 await tracker.init();
+
+// Optional: update page blocks for SPA route changes
+tracker.setPageBlocks([
+  {
+    id: 1,
+    blockName: "Hero",
+    blockSummary: "Top hero section",
+    blockDom: "hero",
+  },
+]);
 
 // Manually flush data
 await tracker.flush();

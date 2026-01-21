@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
-import { pathDurations } from "@/db/schema";
+import { blockDurations } from "@/db/schema";
 
 // Handle CORS preflight
 export async function OPTIONS() {
@@ -50,12 +50,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Insert durations into database
     // Use onConflictDoNothing to handle duplicates gracefully
     const result = await db
-      .insert(pathDurations)
+      .insert(blockDurations)
       .values(
         durations.map((d) => ({
+          blockId: String(d.blockId),
           path: d.path,
           duration: d.duration,
           timestamp: d.timestamp,
@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
       },
     );
   } catch (error) {
-    console.error("Error processing durations:", error);
+    console.error("Error processing block durations:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       {

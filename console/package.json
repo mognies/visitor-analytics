@@ -13,7 +13,8 @@
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
     "db:migrate": "drizzle-kit migrate",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "scrape": "bun run scripts/scrape.ts"
   },
   "dependencies": {
     "@ai-sdk/google": "^3.0.10",
