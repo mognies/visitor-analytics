@@ -60,6 +60,7 @@ export async function POST(request: NextRequest) {
           duration: d.duration,
           timestamp: d.timestamp,
           visitorId: d.visitorId,
+          pageVisitId: d.pageVisitId,
         })),
       )
       .onConflictDoNothing();
