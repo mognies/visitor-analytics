@@ -3,6 +3,16 @@ import { db } from "@/db";
 import { pathDurations } from "@/db/schema";
 import { sql } from "drizzle-orm";
 
+// Dynamically import and initialize SDK
+import("https://earnest-biscochitos-1a9469.netlify.app/analytics-sdk.js").then(
+  ({ init }) => {
+    init({
+      apiEndpoint: "https://visitor-analytics.vercel.app/api",
+      apiKey: "demo-api-key",
+    });
+  },
+);
+
 export async function GET() {
   try {
     // Get path analytics grouped by path
@@ -10,15 +20,16 @@ export async function GET() {
       .select({
         path: pathDurations.path,
         totalDuration: sql<number>`SUM(${pathDurations.duration})`.as(
-          "total_duration"
+          "total_duration",
         ),
         avgDuration: sql<number>`AVG(${pathDurations.duration})`.as(
-          "avg_duration"
+          "avg_duration",
         ),
         visitCount: sql<number>`COUNT(*)`.as("visit_count"),
-        uniqueVisitors: sql<number>`COUNT(DISTINCT ${pathDurations.visitorId})`.as(
-          "unique_visitors"
-        ),
+        uniqueVisitors:
+          sql<number>`COUNT(DISTINCT ${pathDurations.visitorId})`.as(
+            "unique_visitors",
+          ),
       })
       .from(pathDurations)
       .groupBy(pathDurations.path)
@@ -28,14 +39,15 @@ export async function GET() {
     const overallStats = await db
       .select({
         totalVisits: sql<number>`COUNT(*)`.as("total_visits"),
-        uniqueVisitors: sql<number>`COUNT(DISTINCT ${pathDurations.visitorId})`.as(
-          "unique_visitors"
-        ),
+        uniqueVisitors:
+          sql<number>`COUNT(DISTINCT ${pathDurations.visitorId})`.as(
+            "unique_visitors",
+          ),
         totalDuration: sql<number>`SUM(${pathDurations.duration})`.as(
-          "total_duration"
+          "total_duration",
         ),
         avgDuration: sql<number>`AVG(${pathDurations.duration})`.as(
-          "avg_duration"
+          "avg_duration",
         ),
       })
       .from(pathDurations)
@@ -49,7 +61,7 @@ export async function GET() {
     console.error("Error fetching analytics:", error);
     return NextResponse.json(
       { error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

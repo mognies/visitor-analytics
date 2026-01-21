@@ -164,7 +164,6 @@ async function scrape(url: string, maxPages: number = 100) {
           console.log(
             `Original HTML length: ${page.html?.length || 0}, Cleaned: ${cleanedHtml.length}`,
           );
-          console.log(cleanedHtml);
 
           // Generate analysis using Gemini
           const { output: blocks } = await generateText({
@@ -180,7 +179,6 @@ async function scrape(url: string, maxPages: number = 100) {
               ),
             }),
           });
-          console.log(blocks);
 
           if (storedPage && blocks.length > 0) {
             await db

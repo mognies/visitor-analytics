@@ -30,6 +30,14 @@ export default function VisitorAnalytics() {
   const [selectedVisitor, setSelectedVisitor] = useState<Visitor | null>(null);
   const [analyzingIntent, setAnalyzingIntent] = useState(false);
   const [intentAnalysis, setIntentAnalysis] = useState<string | null>(null);
+  const [generatingGreeting, setGeneratingGreeting] = useState(false);
+  const [greetingMessage, setGreetingMessage] = useState<string | null>(null);
+
+  const closeModal = () => {
+    setSelectedVisitor(null);
+    setIntentAnalysis(null);
+    setGreetingMessage(null);
+  };
 
   const fetchData = async () => {
     try {
@@ -38,7 +46,9 @@ export default function VisitorAnalytics() {
       if (!response.ok) throw new Error("Failed to fetch visitor analytics");
       const result = await response.json();
       // Sort visitors by lastVisit descending (most recent first)
-      result.visitors.sort((a: Visitor, b: Visitor) => b.lastVisit - a.lastVisit);
+      result.visitors.sort(
+        (a: Visitor, b: Visitor) => b.lastVisit - a.lastVisit,
+      );
       setData(result);
       setError(null);
     } catch (err) {
@@ -158,6 +168,40 @@ export default function VisitorAnalytics() {
       setIntentAnalysis("Failed to analyze visitor intent. Please try again.");
     } finally {
       setAnalyzingIntent(false);
+    }
+  };
+
+  const handleGenerateGreeting = async () => {
+    if (!selectedVisitor) return;
+
+    setGeneratingGreeting(true);
+    setGreetingMessage(null);
+
+    try {
+      const response = await fetch("/api/generate-greeting", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          visitorId: selectedVisitor.visitorId,
+          paths: selectedVisitor.paths,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to generate greeting");
+      }
+
+      const data = await response.json();
+      setGreetingMessage(data.greeting);
+    } catch (error) {
+      console.error("Failed to generate greeting:", error);
+      setGreetingMessage(
+        "接客文章の生成に失敗しました。もう一度お試しください。",
+      );
+    } finally {
+      setGeneratingGreeting(false);
     }
   };
 
@@ -417,7 +461,7 @@ export default function VisitorAnalytics() {
       {selectedVisitor && (
         <div
           className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
-          onClick={() => setSelectedVisitor(null)}
+          onClick={closeModal}
         >
           <div
             className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[80vh] overflow-hidden flex flex-col"
@@ -433,7 +477,7 @@ export default function VisitorAnalytics() {
                 </p>
               </div>
               <button
-                onClick={() => setSelectedVisitor(null)}
+                onClick={closeModal}
                 className="text-white hover:bg-white/20 rounded-lg p-2 transition-colors cursor-pointer"
               >
                 <svg
@@ -491,6 +535,131 @@ export default function VisitorAnalytics() {
                     Avg per Page
                   </div>
                 </div>
+              </div>
+
+              {/* AI Greeting Message Generator */}
+              <div className="bg-white rounded-xl shadow p-6 border border-slate-200">
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="text-sm font-bold text-slate-900 flex items-center">
+                    <svg
+                      className="w-5 h-5 mr-2 text-green-600"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+                      />
+                    </svg>
+                    接客文章生成
+                  </h4>
+                  <button
+                    onClick={handleGenerateGreeting}
+                    disabled={generatingGreeting}
+                    className={`px-4 py-2 rounded-lg font-medium text-sm transition-all ${
+                      generatingGreeting
+                        ? "bg-slate-100 text-slate-400 cursor-not-allowed"
+                        : "bg-gradient-to-r from-green-600 to-teal-600 text-white hover:from-green-700 hover:to-teal-700 shadow-lg hover:shadow-xl transform hover:scale-105"
+                    }`}
+                  >
+                    {generatingGreeting ? (
+                      <span className="flex items-center">
+                        <svg
+                          className="animate-spin -ml-1 mr-2 h-4 w-4"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          ></circle>
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          ></path>
+                        </svg>
+                        生成中...
+                      </span>
+                    ) : (
+                      <span className="flex items-center">
+                        <svg
+                          className="w-4 h-4 mr-2"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+                          />
+                        </svg>
+                        接客文章を作成
+                      </span>
+                    )}
+                  </button>
+                </div>
+
+                {greetingMessage ? (
+                  <div className="mt-4 p-5 bg-gradient-to-r from-green-50 to-teal-50 border-2 border-green-300 rounded-lg">
+                    <div className="flex items-start space-x-3">
+                      <div className="flex-shrink-0">
+                        <svg
+                          className="w-6 h-6 text-green-600"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+                          />
+                        </svg>
+                      </div>
+                      <div className="flex-1">
+                        <h5 className="text-sm font-semibold text-slate-900 mb-2">
+                          生成された接客文章
+                        </h5>
+                        <p className="text-base text-slate-800 leading-relaxed font-medium">
+                          {greetingMessage}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="mt-4 p-6 border-2 border-dashed border-slate-200 rounded-lg text-center">
+                    <svg
+                      className="w-12 h-12 mx-auto text-slate-300 mb-3"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+                      />
+                    </svg>
+                    <p className="text-sm text-slate-500 font-medium">
+                      「接客文章を作成」をクリックして訪問者に合わせた接客文を生成
+                    </p>
+                    <p className="text-xs text-slate-400 mt-1">
+                      訪問履歴から訪問者の関心事を分析し、最適な接客文を1行で提案します
+                    </p>
+                  </div>
+                )}
               </div>
 
               {/* AI Intent Analysis */}
@@ -612,7 +781,8 @@ export default function VisitorAnalytics() {
                       Click "Analyze Intent" to understand visitor behavior
                     </p>
                     <p className="text-xs text-slate-400 mt-1">
-                      AI will analyze the visit timeline to identify patterns and intent
+                      AI will analyze the visit timeline to identify patterns
+                      and intent
                     </p>
                   </div>
                 )}

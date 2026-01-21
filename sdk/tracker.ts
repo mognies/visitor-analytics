@@ -90,11 +90,8 @@ export class AnalyticsTracker {
   }
 
   private endTrackingAndSend(sender: DurationSender): void {
-    console.log("[AnalyticsTracker] endTrackingAndSend called");
     const pathDuration = this.endPathTracking();
     const blockDurations = this.endBlockTracking();
-    console.log("[AnalyticsTracker] pathDuration:", pathDuration);
-    console.log("[AnalyticsTracker] blockDurations:", blockDurations);
     sender(pathDuration, blockDurations);
   }
 
@@ -102,25 +99,12 @@ export class AnalyticsTracker {
     pathDuration: PathDuration | null,
     blockDurations: BlockDuration[],
   ): void {
-    console.log("[AnalyticsTracker] sendViaBeacon called");
-    console.log("[AnalyticsTracker] pathDuration:", pathDuration);
-    console.log("[AnalyticsTracker] blockDurations:", blockDurations);
-
     if (pathDuration) {
-      const result = this.apiClient.sendBeaconPathDurations([pathDuration]);
-      console.log("[AnalyticsTracker] sendBeaconPathDurations result:", result);
-    } else {
-      console.log("[AnalyticsTracker] No pathDuration to send");
+      this.apiClient.sendBeaconPathDurations([pathDuration]);
     }
 
     if (blockDurations.length > 0) {
-      const result = this.apiClient.sendBeaconBlockDurations(blockDurations);
-      console.log(
-        "[AnalyticsTracker] sendBeaconBlockDurations result:",
-        result,
-      );
-    } else {
-      console.log("[AnalyticsTracker] No blockDurations to send");
+      this.apiClient.sendBeaconBlockDurations(blockDurations);
     }
   }
 
@@ -138,7 +122,6 @@ export class AnalyticsTracker {
 
   private startPathTracking(): void {
     const currentPath = getCurrentPath();
-    console.log("[AnalyticsTracker] startPathTracking:", currentPath);
 
     if (this.currentPath && this.currentPath !== currentPath) {
       this.endPathTracking();
@@ -149,28 +132,12 @@ export class AnalyticsTracker {
       this.currentPath = currentPath;
       this.pathStartTime = Date.now();
       this.currentPageVisitId = this.generatePageVisitId();
-      console.log(
-        "[AnalyticsTracker] Started tracking path:",
-        this.currentPath,
-        "at",
-        this.pathStartTime,
-        "pageVisitId:",
-        this.currentPageVisitId,
-      );
       void this.refreshPageBlocksForPath(currentPath);
     }
   }
 
   private endPathTracking(): PathDuration | null {
-    console.log(
-      "[AnalyticsTracker] endPathTracking - currentPath:",
-      this.currentPath,
-      "pathStartTime:",
-      this.pathStartTime,
-    );
-
     if (!this.currentPath || !this.pathStartTime || !this.currentPageVisitId) {
-      console.log("[AnalyticsTracker] No active path tracking to end");
       return null;
     }
 
@@ -183,10 +150,7 @@ export class AnalyticsTracker {
     this.pathStartTime = null;
     this.currentPageVisitId = null;
 
-    console.log("[AnalyticsTracker] Path duration:", duration, "ms");
-
     if (duration < 1000) {
-      console.log("[AnalyticsTracker] Duration < 1000ms, not recording");
       return null;
     }
 
@@ -198,7 +162,6 @@ export class AnalyticsTracker {
       pageVisitId,
     };
 
-    console.log("[AnalyticsTracker] Created pathDuration:", pathDuration);
     // Note: Don't save here - let the caller decide whether to save to storage or send via beacon
     return pathDuration;
   }

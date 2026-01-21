@@ -8,7 +8,7 @@
   "main": "dist/analytics-sdk.js",
   "type": "module",
   "scripts": {
-    "build": "bun build ./index.ts --outfile ../sample-site/public/analytics-sdk.js --target browser --format esm --minify && cp _headers dist/_headers",
+    "build": "bun build ./index.ts --outfile ../sample-site/public/analytics-sdk.js --target browser --format esm --minify && cp ../sample-site/public/analytics-sdk.js dist/analytics-sdk.js && cp _headers dist/_headers",
     "dev": "bun build ./index.ts --outfile ./dist/analytics-sdk.js --target browser --format esm --watch",
     "typecheck": "tsc --noEmit"
   },
@@ -28,7 +28,5 @@
   "peerDependencies": {
     "typescript": "^5"
   },
-  "dependencies": {
-    "dexie": "^4.2.1"
-  }
+  "dependencies": {}
 }
