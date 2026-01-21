@@ -1,16 +1,22 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 function setCorsHeaders(response: NextResponse, origin: string | null) {
-  response.headers.set("Access-Control-Allow-Origin", origin ?? "*");
+  // When using credentials, we must specify the exact origin, not "*"
+  if (origin) {
+    response.headers.set("Access-Control-Allow-Origin", origin);
+    response.headers.set("Access-Control-Allow-Credentials", "true");
+  } else {
+    // Fallback to wildcard if no origin (but credentials won't work)
+    response.headers.set("Access-Control-Allow-Origin", "*");
+  }
   response.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   response.headers.set(
     "Access-Control-Allow-Headers",
     "Content-Type, Authorization",
   );
-  response.headers.set("Access-Control-Allow-Credentials", "true");
 }
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   if (request.nextUrl.pathname.startsWith("/api/")) {
     const origin = request.headers.get("origin");
 
