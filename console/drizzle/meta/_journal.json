@@ -5,43 +5,8 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1768538434421,
-      "tag": "0000_redundant_mister_sinister",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1768538758442,
-      "tag": "0001_useful_rawhide_kid",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1768545677228,
-      "tag": "0002_easy_sunset_bain",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "6",
-      "when": 1768548124712,
-      "tag": "0003_massive_prima",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "6",
-      "when": 1769000000001,
-      "tag": "0004_add_block_durations",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "6",
-      "when": 1768982716130,
-      "tag": "0005_colossal_marrow",
+      "when": 1768985526775,
+      "tag": "0000_sour_malice",
       "breakpoints": true
     }
   ]

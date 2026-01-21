@@ -20,6 +20,7 @@ interface BlockState {
   visibleCount: number;
   visibleStart: number | null;
   path: string;
+  pageVisitId: string;
 }
 
 type DurationSender = (
@@ -33,6 +34,7 @@ export class AnalyticsTracker {
   private visitorId: string;
   private currentPath: string | null = null;
   private pathStartTime: number | null = null;
+  private currentPageVisitId: string | null = null;
   private isInitialized = false;
   private blockObserver: IntersectionObserver | null = null;
   private blockElements = new Map<string, Element[]>();
@@ -47,6 +49,10 @@ export class AnalyticsTracker {
     this.config = config;
     this.apiClient = new ApiClient(this.config.apiEndpoint, this.config.apiKey);
     this.visitorId = getVisitorId();
+  }
+
+  private generatePageVisitId(): string {
+    return `${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
   }
 
   async init(): Promise<void> {
@@ -142,11 +148,14 @@ export class AnalyticsTracker {
     if (!this.currentPath || this.currentPath !== currentPath) {
       this.currentPath = currentPath;
       this.pathStartTime = Date.now();
+      this.currentPageVisitId = this.generatePageVisitId();
       console.log(
         "[AnalyticsTracker] Started tracking path:",
         this.currentPath,
         "at",
         this.pathStartTime,
+        "pageVisitId:",
+        this.currentPageVisitId,
       );
       void this.refreshPageBlocksForPath(currentPath);
     }
@@ -160,7 +169,7 @@ export class AnalyticsTracker {
       this.pathStartTime,
     );
 
-    if (!this.currentPath || !this.pathStartTime) {
+    if (!this.currentPath || !this.pathStartTime || !this.currentPageVisitId) {
       console.log("[AnalyticsTracker] No active path tracking to end");
       return null;
     }
@@ -168,9 +177,11 @@ export class AnalyticsTracker {
     const duration = Date.now() - this.pathStartTime;
     const path = this.currentPath;
     const startTime = this.pathStartTime;
+    const pageVisitId = this.currentPageVisitId;
 
     this.currentPath = null;
     this.pathStartTime = null;
+    this.currentPageVisitId = null;
 
     console.log("[AnalyticsTracker] Path duration:", duration, "ms");
 
@@ -184,6 +195,7 @@ export class AnalyticsTracker {
       duration,
       timestamp: startTime,
       visitorId: this.visitorId,
+      pageVisitId,
     };
 
     console.log("[AnalyticsTracker] Created pathDuration:", pathDuration);
@@ -284,6 +296,7 @@ export class AnalyticsTracker {
     );
 
     const currentPath = this.currentPath ?? getCurrentPath();
+    const pageVisitId = this.currentPageVisitId ?? this.generatePageVisitId();
 
     for (const block of pageBlocks) {
       const blockKey = String(block.id);
@@ -299,6 +312,7 @@ export class AnalyticsTracker {
         visibleCount: 0,
         visibleStart: null,
         path: currentPath,
+        pageVisitId,
       });
 
       for (const element of elements) {
@@ -384,6 +398,7 @@ export class AnalyticsTracker {
       duration,
       timestamp: startTime,
       visitorId: this.visitorId,
+      pageVisitId: state.pageVisitId,
     };
 
     // Note: Don't save here - let the caller decide whether to save to storage or send via beacon

@@ -4,6 +4,7 @@ export interface PathDuration {
   duration: number; // in milliseconds
   timestamp: number;
   visitorId: string;
+  pageVisitId: string;
 }
 
 export interface PageBlock {
@@ -20,6 +21,7 @@ export interface BlockDuration {
   duration: number; // in milliseconds
   timestamp: number;
   visitorId: string;
+  pageVisitId: string;
 }
 
 export interface TrackerConfig {

@@ -13,6 +13,7 @@ export const pathDurations = sqliteTable(
     duration: integer("duration").notNull(), // in milliseconds
     timestamp: integer("timestamp").notNull(),
     visitorId: text("visitor_id").notNull(),
+    pageVisitId: text("page_visit_id").notNull(),
     createdAt: integer("created_at")
       .notNull()
       .$defaultFn(() => Date.now()),
@@ -58,6 +59,7 @@ export const blockDurations = sqliteTable(
     duration: integer("duration").notNull(), // in milliseconds
     timestamp: integer("timestamp").notNull(),
     visitorId: text("visitor_id").notNull(),
+    pageVisitId: text("page_visit_id").notNull(),
     createdAt: integer("created_at")
       .notNull()
       .$defaultFn(() => Date.now()),
