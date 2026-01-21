@@ -10,16 +10,27 @@ export async function OPTIONS() {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "POST, OPTIONS",
       "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      "Access-Control-Allow-Credentials": "true",
     },
   });
 }
 
 export async function POST(request: NextRequest) {
   try {
+    const body = await request.json();
+    const { durations, apiKey: bodyApiKey } = body;
+
     const authHeader = request.headers.get("authorization");
     const expectedKey = process.env.API_KEY || "demo-api-key";
 
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    const headerKey =
+      authHeader && authHeader.startsWith("Bearer ")
+        ? authHeader.substring(7)
+        : null;
+    const isAuthorized =
+      headerKey === expectedKey || bodyApiKey === expectedKey;
+
+    if (!isAuthorized) {
       return NextResponse.json(
         { error: "Unauthorized" },
         {
@@ -28,20 +39,6 @@ export async function POST(request: NextRequest) {
         },
       );
     }
-
-    const apiKey = authHeader.substring(7);
-    if (apiKey !== expectedKey) {
-      return NextResponse.json(
-        { error: "Invalid API key" },
-        {
-          status: 401,
-          headers: { "Access-Control-Allow-Origin": "*" },
-        },
-      );
-    }
-
-    const body = await request.json();
-    const { durations } = body;
 
     if (!Array.isArray(durations) || durations.length === 0) {
       return NextResponse.json(
@@ -53,20 +50,25 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    await db.insert(blockDurations).values(
-      durations.map((d) => ({
-        blockId: String(d.blockId),
-        path: d.path,
-        duration: d.duration,
-        timestamp: d.timestamp,
-        visitorId: d.visitorId,
-      })),
-    );
+    // Use onConflictDoNothing to handle duplicates gracefully
+    const result = await db
+      .insert(blockDurations)
+      .values(
+        durations.map((d) => ({
+          blockId: String(d.blockId),
+          path: d.path,
+          duration: d.duration,
+          timestamp: d.timestamp,
+          visitorId: d.visitorId,
+        })),
+      )
+      .onConflictDoNothing();
 
     return NextResponse.json(
       {
         success: true,
         count: durations.length,
+        inserted: result.rowsAffected || 0,
       },
       {
         headers: { "Access-Control-Allow-Origin": "*" },

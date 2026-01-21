@@ -36,6 +36,13 @@
       "when": 1769000000001,
       "tag": "0004_add_block_durations",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1768982716130,
+      "tag": "0005_colossal_marrow",
+      "breakpoints": true
     }
   ]
 }

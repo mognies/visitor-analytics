@@ -13,7 +13,7 @@ const flushInterval = import.meta.env.PUBLIC_ANALYTICS_FLUSH_INTERVAL || "10000"
 // For production, use /analytics-sdk.js (served from same domain)
 // For local dev, use relative path to SDK build output
 const sdkUrl = import.meta.env.PUBLIC_ANALYTICS_SDK_URL ||
-  (import.meta.env.DEV ? "../sdk/dist/analytics-sdk.js" : "/analytics-sdk.js");
+  (import.meta.env.DEV ? "/analytics-sdk.js" : "/analytics-sdk.js");
 ---
 
 <!doctype html>

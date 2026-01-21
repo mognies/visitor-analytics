@@ -7,6 +7,7 @@ function setCorsHeaders(response: NextResponse, origin: string | null) {
     "Access-Control-Allow-Headers",
     "Content-Type, Authorization",
   );
+  response.headers.set("Access-Control-Allow-Credentials", "true");
 }
 
 export function middleware(request: NextRequest) {

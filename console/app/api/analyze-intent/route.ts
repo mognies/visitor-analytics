@@ -100,6 +100,10 @@ export async function POST(request: NextRequest) {
     );
 
     // Group paths by date and calculate total duration per page
+    const visitsByDate: Record<
+      string,
+      { path: string; duration: number; timestamp: number; index: number }[]
+    > = {};
     const pathsByDate: Record<string, Record<string, number>> = {};
     const pathTotals: Record<string, number> = {};
     const blockDurationsByDate: Record<
@@ -109,8 +113,17 @@ export async function POST(request: NextRequest) {
     const blockTotals: Record<string, number> = {};
     const blockTotalsByPath: Record<string, Record<string, number>> = {};
 
-    for (const path of paths) {
+    for (const [index, path] of paths.entries()) {
       const date = new Date(path.timestamp).toISOString().split("T")[0];
+      if (!visitsByDate[date]) {
+        visitsByDate[date] = [];
+      }
+      visitsByDate[date].push({
+        path: path.path,
+        duration: path.duration,
+        timestamp: path.timestamp,
+        index,
+      });
       if (!pathsByDate[date]) {
         pathsByDate[date] = {};
       }
@@ -170,9 +183,15 @@ export async function POST(request: NextRequest) {
 `;
 
     // Add date-based visit history
-    for (const [date, pathDurations] of Object.entries(pathsByDate)) {
+    const sortedDates = Object.keys(visitsByDate).sort();
+    for (const date of sortedDates) {
+      const visits = visitsByDate[date]
+        .slice()
+        .sort((a, b) => a.timestamp - b.timestamp || a.index - b.index);
       prompt += `### ${date}\n`;
-      for (const [path, duration] of Object.entries(pathDurations)) {
+      for (const visit of visits) {
+        const path = visit.path;
+        const duration = visit.duration;
         const pageInfo = pageInfoMap.get(path);
         prompt += `- **${path}** (${formatDuration(duration)})\n`;
         if (pageInfo?.title) {
@@ -183,7 +202,10 @@ export async function POST(request: NextRequest) {
         }
 
         const blockDurationsForPath = blockDurationsByDate[date]?.[path] ?? {};
-        const blockEntries = Object.entries(blockDurationsForPath);
+        const blockEntries = Object.entries(blockDurationsForPath).sort(
+          ([blockIdA], [blockIdB]) =>
+            String(blockIdA).localeCompare(String(blockIdB)),
+        );
         if (blockEntries.length > 0) {
           prompt += "  ブロック別の滞在:\n";
           for (const [blockId, duration] of blockEntries) {
