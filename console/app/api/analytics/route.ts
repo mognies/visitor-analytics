@@ -3,16 +3,6 @@ import { db } from "@/db";
 import { pathDurations } from "@/db/schema";
 import { sql } from "drizzle-orm";
 
-// Dynamically import and initialize SDK
-import("https://earnest-biscochitos-1a9469.netlify.app/analytics-sdk.js").then(
-  ({ init }) => {
-    init({
-      apiEndpoint: "https://visitor-analytics.vercel.app/api",
-      apiKey: "demo-api-key",
-    });
-  },
-);
-
 export async function GET() {
   try {
     // Get path analytics grouped by path
