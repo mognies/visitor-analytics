@@ -31,9 +31,9 @@
   "dependencies": {},
   "devDependencies": {
     "@types/bun": "latest",
-    "npm-run-all2": "^8.0.4",
-    "oxfmt": "^0.26.0",
-    "oxlint": "^1.41.0"
+    "npm-run-all2": "catalog:",
+    "oxfmt": "catalog:",
+    "oxlint": "catalog:"
   },
   "peerDependencies": {
     "typescript": "^5"

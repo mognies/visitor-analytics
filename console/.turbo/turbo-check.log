@@ -1,11 +1,11 @@
 
-[0m[2m[35m$[0m [2m[1mbun run check:lint && bun run check:fmt && bun run check:type[0m
+[0m[2m[35m$[0m [2m[1mrun-p check:*[0m
 [0m[2m[35m$[0m [2m[1mbunx oxlint[0m
-Found 0 warnings and 0 errors.
-Finished in 10ms on 21 files with 90 rules using 10 threads.
 [0m[2m[35m$[0m [2m[1mbunx oxfmt --check[0m
+[0m[2m[35m$[0m [2m[1mtsc --noEmit[0m
+Found 0 warnings and 0 errors.
+Finished in 4ms on 21 files with 90 rules using 10 threads.
 Checking formatting...
 
 All matched files use the correct format.
-Finished in 175ms on 30 files using 10 threads.
-[0m[2m[35m$[0m [2m[1mtsc --noEmit[0m
+Finished in 219ms on 30 files using 10 threads.
