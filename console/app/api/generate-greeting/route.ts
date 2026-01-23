@@ -76,26 +76,14 @@ async function fetchDetailedVisitorData(
 export async function POST(request: NextRequest) {
   try {
     const body: GenerateGreetingRequest = await request.json();
-    const {
-      visitorId,
-      paths,
-      model = "gemini-2.5-flash",
-      intentAnalysis,
-    } = body;
+    const { visitorId, paths, model = "gemini-2.5-flash", intentAnalysis } = body;
 
     if (!visitorId || !paths || paths.length === 0) {
-      return NextResponse.json(
-        { error: "visitorId and paths are required" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: "visitorId and paths are required" }, { status: 400 });
     }
 
     // Validate model
-    const validModels = [
-      "gemini-2.5-flash-lite",
-      "gemini-2.5-flash",
-      "gemini-3-flash-preview",
-    ];
+    const validModels = ["gemini-2.5-flash-lite", "gemini-2.5-flash", "gemini-3-flash-preview"];
     if (!validModels.includes(model)) {
       return NextResponse.json(
         { error: `Invalid model. Must be one of: ${validModels.join(", ")}` },

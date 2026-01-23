@@ -20,12 +20,12 @@ bun add @visitor-analytics/sdk
 ## Quick Start
 
 ```typescript
-import { init } from '@visitor-analytics/sdk';
+import { init } from "@visitor-analytics/sdk";
 
 // Initialize the tracker
 await init({
-  apiEndpoint: 'https://api.yourdomain.com',
-  apiKey: 'your-api-key',
+  apiEndpoint: "https://api.yourdomain.com",
+  apiKey: "your-api-key",
 });
 ```
 
@@ -33,9 +33,9 @@ await init({
 
 ```typescript
 interface TrackerConfig {
-  apiEndpoint: string;      // Your API endpoint URL
-  apiKey: string;           // Your API key
-  flushInterval?: number;   // Interval to flush data in ms (default: 30s)
+  apiEndpoint: string; // Your API endpoint URL
+  apiKey: string; // Your API key
+  flushInterval?: number; // Interval to flush data in ms (default: 30s)
 }
 ```
 
@@ -132,7 +132,7 @@ The response should be a JSON array of `PageBlock`.
 ### Force Flush
 
 ```typescript
-import { flush } from '@visitor-analytics/sdk';
+import { flush } from "@visitor-analytics/sdk";
 
 // Force send all pending data
 await flush();
@@ -141,7 +141,7 @@ await flush();
 ### Destroy Tracker
 
 ```typescript
-import { destroy } from '@visitor-analytics/sdk';
+import { destroy } from "@visitor-analytics/sdk";
 
 // Clean up and destroy tracker
 destroy();
@@ -150,11 +150,11 @@ destroy();
 ### Using the Tracker Instance
 
 ```typescript
-import { AnalyticsTracker } from '@visitor-analytics/sdk';
+import { AnalyticsTracker } from "@visitor-analytics/sdk";
 
 const tracker = new AnalyticsTracker({
-  apiEndpoint: 'https://api.yourdomain.com',
-  apiKey: 'your-api-key',
+  apiEndpoint: "https://api.yourdomain.com",
+  apiKey: "your-api-key",
 });
 
 await tracker.init();

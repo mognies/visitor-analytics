@@ -43,9 +43,7 @@ export default function Home() {
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<
-    "analytics" | "visitors" | "pages"
-  >("analytics");
+  const [activeTab, setActiveTab] = useState<"analytics" | "visitors" | "pages">("analytics");
   const [pagesRefresh, setPagesRefresh] = useState(0);
 
   useEffect(() => {
@@ -79,9 +77,7 @@ export default function Home() {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-          <p className="mt-4 text-slate-600 font-medium">
-            Loading analytics...
-          </p>
+          <p className="mt-4 text-slate-600 font-medium">Loading analytics...</p>
         </div>
       </div>
     );
@@ -149,12 +145,7 @@ export default function Home() {
                 } whitespace-nowrap py-4 px-1 border-b-2 font-semibold text-sm transition-colors cursor-pointer`}
               >
                 <div className="flex items-center space-x-2">
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -174,12 +165,7 @@ export default function Home() {
                 } whitespace-nowrap py-4 px-1 border-b-2 font-semibold text-sm transition-colors cursor-pointer`}
               >
                 <div className="flex items-center space-x-2">
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -199,12 +185,7 @@ export default function Home() {
                 } whitespace-nowrap py-4 px-1 border-b-2 font-semibold text-sm transition-colors cursor-pointer`}
               >
                 <div className="flex items-center space-x-2">
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -229,9 +210,7 @@ export default function Home() {
                 <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl shadow-lg p-6 text-white transform hover:scale-105 transition-transform cursor-pointer">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-blue-100 text-sm font-medium mb-1">
-                        Total Visits
-                      </p>
+                      <p className="text-blue-100 text-sm font-medium mb-1">Total Visits</p>
                       <p className="text-3xl font-bold">
                         {data.overallStats.totalVisits.toLocaleString()}
                       </p>
@@ -263,9 +242,7 @@ export default function Home() {
                 <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl shadow-lg p-6 text-white transform hover:scale-105 transition-transform cursor-pointer">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-purple-100 text-sm font-medium mb-1">
-                        Unique Visitors
-                      </p>
+                      <p className="text-purple-100 text-sm font-medium mb-1">Unique Visitors</p>
                       <p className="text-3xl font-bold">
                         {data.overallStats.uniqueVisitors.toLocaleString()}
                       </p>
@@ -291,9 +268,7 @@ export default function Home() {
                 <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-2xl shadow-lg p-6 text-white transform hover:scale-105 transition-transform cursor-pointer">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-green-100 text-sm font-medium mb-1">
-                        Total Duration
-                      </p>
+                      <p className="text-green-100 text-sm font-medium mb-1">Total Duration</p>
                       <p className="text-3xl font-bold">
                         {formatDuration(data.overallStats.totalDuration)}
                       </p>
@@ -319,9 +294,7 @@ export default function Home() {
                 <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl shadow-lg p-6 text-white transform hover:scale-105 transition-transform cursor-pointer">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-orange-100 text-sm font-medium mb-1">
-                        Avg Duration
-                      </p>
+                      <p className="text-orange-100 text-sm font-medium mb-1">Avg Duration</p>
                       <p className="text-3xl font-bold">
                         {formatDuration(data.overallStats.avgDuration)}
                       </p>
@@ -349,9 +322,7 @@ export default function Home() {
             {/* Path Analytics Table */}
             <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
               <div className="px-6 py-5 border-b border-slate-200 bg-gradient-to-r from-slate-50 to-white">
-                <h2 className="text-xl font-bold text-slate-900">
-                  Path Analytics
-                </h2>
+                <h2 className="text-xl font-bold text-slate-900">Path Analytics</h2>
                 <p className="text-sm text-slate-600 mt-1">
                   Detailed breakdown of visitor engagement by page path
                 </p>
@@ -394,9 +365,7 @@ export default function Home() {
                               d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                             />
                           </svg>
-                          <p className="mt-4 text-slate-500 font-medium">
-                            No data available
-                          </p>
+                          <p className="mt-4 text-slate-500 font-medium">No data available</p>
                           <p className="text-sm text-slate-400">
                             Start tracking to see analytics here
                           </p>

@@ -11,21 +11,15 @@ export async function POST(request: NextRequest) {
     const expectedKey = process.env.API_KEY || "demo-api-key";
 
     const headerKey =
-      authHeader && authHeader.startsWith("Bearer ")
-        ? authHeader.substring(7)
-        : null;
-    const isAuthorized =
-      headerKey === expectedKey || bodyApiKey === expectedKey;
+      authHeader && authHeader.startsWith("Bearer ") ? authHeader.substring(7) : null;
+    const isAuthorized = headerKey === expectedKey || bodyApiKey === expectedKey;
 
     if (!isAuthorized) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     if (!Array.isArray(durations) || durations.length === 0) {
-      return NextResponse.json(
-        { error: "Invalid request body" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
     }
 
     // Insert durations into database
@@ -50,9 +44,6 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error("Error processing durations:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

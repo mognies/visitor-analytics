@@ -21,10 +21,7 @@ export async function GET(
     // Check for Firecrawl API key
     const apiKey = process.env.FIRECRAWL_API_KEY;
     if (!apiKey) {
-      return NextResponse.json(
-        { error: "FIRECRAWL_API_KEY not configured" },
-        { status: 500 },
-      );
+      return NextResponse.json({ error: "FIRECRAWL_API_KEY not configured" }, { status: 500 });
     }
 
     // Get job from database

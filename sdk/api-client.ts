@@ -21,9 +21,7 @@ export class ApiClient {
       });
 
       if (!response.ok) {
-        console.error(
-          `Failed to send path durations: ${response.status} ${response.statusText}`,
-        );
+        console.error(`Failed to send path durations: ${response.status} ${response.statusText}`);
         return false;
       }
 

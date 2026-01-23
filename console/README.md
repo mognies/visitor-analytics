@@ -61,6 +61,7 @@ turso dev --db-file analytics.db
 ```
 
 Add to `.env.local`:
+
 ```env
 # For local development with `turso dev`
 TURSO_DATABASE_URL=http://127.0.0.1:8080
@@ -109,6 +110,7 @@ GOOGLE_GENERATIVE_AI_API_KEY=your-google-ai-api-key
 ```
 
 **Note**:
+
 - You need a Firecrawl API key to use the page import feature. Sign up at [https://firecrawl.dev](https://firecrawl.dev) to get your API key.
 - You need a Google AI API key to use the AI intent analysis feature. Get your API key at [https://ai.google.dev](https://ai.google.dev).
 - For local development, run `turso dev --db-file analytics.db` in a separate terminal before starting the dev server.
@@ -122,6 +124,7 @@ Receives path duration data from the SDK.
 **Authentication**: Bearer token
 
 **Request Body**:
+
 ```json
 {
   "durations": [
@@ -136,6 +139,7 @@ Receives path duration data from the SDK.
 ```
 
 **Response**:
+
 ```json
 {
   "success": true,
@@ -148,6 +152,7 @@ Receives path duration data from the SDK.
 Retrieves analytics data for the dashboard.
 
 **Response**:
+
 ```json
 {
   "pathAnalytics": [
@@ -173,6 +178,7 @@ Retrieves analytics data for the dashboard.
 Imports pages from a website using Firecrawl.
 
 **Request Body**:
+
 ```json
 {
   "url": "https://example.com",
@@ -181,6 +187,7 @@ Imports pages from a website using Firecrawl.
 ```
 
 **Response**:
+
 ```json
 {
   "success": true,
@@ -194,6 +201,7 @@ Imports pages from a website using Firecrawl.
 Analyzes visitor intent using AI based on their journey timeline.
 
 **Request Body**:
+
 ```json
 {
   "visitorId": "visitor-id",
@@ -208,6 +216,7 @@ Analyzes visitor intent using AI based on their journey timeline.
 ```
 
 **Response**:
+
 ```json
 {
   "success": true,
@@ -221,6 +230,7 @@ Analyzes visitor intent using AI based on their journey timeline.
 Retrieves imported pages with their analytics.
 
 **Response**:
+
 ```json
 {
   "pages": [
@@ -244,12 +254,14 @@ Retrieves imported pages with their analytics.
 ## Dashboard Metrics
 
 ### Overall Stats
+
 - **Total Visits**: Total number of page visits tracked
 - **Unique Visitors**: Number of unique visitors
 - **Total Duration**: Cumulative time spent across all paths
 - **Avg Duration**: Average time spent per visit
 
 ### Path Analytics Table
+
 - **Path**: URL path
 - **Total Duration**: Total time spent on this path
 - **Avg Duration**: Average time per visit

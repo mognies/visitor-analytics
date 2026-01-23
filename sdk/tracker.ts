@@ -1,9 +1,5 @@
 import type { PathDuration, TrackerConfig } from "./types";
-import {
-  deleteDurations,
-  getUnsentDurations,
-  savePathDuration,
-} from "./storage";
+import { deleteDurations, getUnsentDurations, savePathDuration } from "./storage";
 import { getCurrentPath, getVisitorId } from "./utils";
 import { ApiClient } from "./api-client";
 
@@ -135,19 +131,14 @@ export class AnalyticsTracker {
     const pathSuccess = await this.apiClient.sendPathDurations(durations);
 
     if (pathSuccess && durations.length > 0) {
-      const ids = durations
-        .map((d) => d.id)
-        .filter((id): id is number => id !== undefined);
+      const ids = durations.map((d) => d.id).filter((id): id is number => id !== undefined);
       await deleteDurations(ids);
     }
   }
 
   destroy(): void {
     if (this.visibilityChangeHandler) {
-      document.removeEventListener(
-        "visibilitychange",
-        this.visibilityChangeHandler,
-      );
+      document.removeEventListener("visibilitychange", this.visibilityChangeHandler);
       this.visibilityChangeHandler = null;
     }
     if (this.beforeUnloadHandler) {

@@ -1,13 +1,8 @@
 import { AnalyticsTracker } from "./tracker";
-import type {
-  BlockDuration,
-  PageBlock,
-  PathDuration,
-  TrackerConfig,
-} from "./types";
+import type { PathDuration, TrackerConfig } from "./types";
 
 export { AnalyticsTracker };
-export type { BlockDuration, PageBlock, TrackerConfig, PathDuration };
+export type { TrackerConfig, PathDuration };
 
 // Global instance for easy access
 let globalTracker: AnalyticsTracker | null = null;

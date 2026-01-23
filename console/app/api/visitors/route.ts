@@ -9,19 +9,11 @@ export async function GET() {
     const visitorStats = await db
       .select({
         visitorId: pathDurations.visitorId,
-        totalDuration: sql<number>`SUM(${pathDurations.duration})`.as(
-          "total_duration"
-        ),
+        totalDuration: sql<number>`SUM(${pathDurations.duration})`.as("total_duration"),
         visitCount: sql<number>`COUNT(*)`.as("visit_count"),
-        uniquePaths: sql<number>`COUNT(DISTINCT ${pathDurations.path})`.as(
-          "unique_paths"
-        ),
-        firstVisit: sql<number>`MIN(${pathDurations.timestamp})`.as(
-          "first_visit"
-        ),
-        lastVisit: sql<number>`MAX(${pathDurations.timestamp})`.as(
-          "last_visit"
-        ),
+        uniquePaths: sql<number>`COUNT(DISTINCT ${pathDurations.path})`.as("unique_paths"),
+        firstVisit: sql<number>`MIN(${pathDurations.timestamp})`.as("first_visit"),
+        lastVisit: sql<number>`MAX(${pathDurations.timestamp})`.as("last_visit"),
       })
       .from(pathDurations)
       .groupBy(pathDurations.visitorId)
@@ -53,9 +45,6 @@ export async function GET() {
     });
   } catch (error) {
     console.error("Error fetching visitor analytics:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

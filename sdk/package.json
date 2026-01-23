@@ -2,31 +2,40 @@
   "name": "@visitor-analytics/sdk",
   "version": "0.1.0",
   "private": true,
-  "license": "UNLICENSED",
   "description": "Web SDK for tracking visitor page history and analyzing customer interests",
-  "module": "dist/analytics-sdk.js",
-  "main": "dist/analytics-sdk.js",
-  "type": "module",
-  "scripts": {
-    "build": "bun build ./index.ts --outfile ../sample-site/public/analytics-sdk.js --target browser --format esm --minify && cp ../sample-site/public/analytics-sdk.js dist/analytics-sdk.js && cp _headers dist/_headers",
-    "dev": "bun build ./index.ts --outfile ./dist/analytics-sdk.js --target browser --format esm --watch",
-    "typecheck": "tsc --noEmit"
-  },
+  "keywords": [
+    "analytics",
+    "page-views",
+    "tracking",
+    "visitor-analytics",
+    "visitor-tracking"
+  ],
+  "license": "UNLICENSED",
   "files": [
     "dist"
   ],
-  "keywords": [
-    "analytics",
-    "tracking",
-    "page-views",
-    "visitor-tracking",
-    "visitor-analytics"
-  ],
+  "type": "module",
+  "main": "dist/analytics-sdk.js",
+  "module": "dist/analytics-sdk.js",
+  "scripts": {
+    "build": "bun build ./index.ts --outfile ../sample-site/public/analytics-sdk.js --target browser --format esm --minify && cp ../sample-site/public/analytics-sdk.js dist/analytics-sdk.js && cp _headers dist/_headers",
+    "dev": "bun build ./index.ts --outfile ./dist/analytics-sdk.js --target browser --format esm --watch",
+    "check": "run-p check:*",
+    "fix": "run-p fix:*",
+    "check:lint": "oxlint",
+    "fix:lint": "oxlint --fix",
+    "check:fmt": "oxfmt --check",
+    "fix:fmt": "oxfmt",
+    "check:type": "tsc --noEmit"
+  },
+  "dependencies": {},
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "npm-run-all2": "^8.0.4",
+    "oxfmt": "^0.26.0",
+    "oxlint": "^1.41.0"
   },
   "peerDependencies": {
     "typescript": "^5"
-  },
-  "dependencies": {}
+  }
 }

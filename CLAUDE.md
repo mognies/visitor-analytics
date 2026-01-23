@@ -1,9 +1,11 @@
 - This system analyzes customer interests based on their page visit history.
 - Default to using Bun instead of Node.js.
+- After completing any code changes, always run `bun run check` in the console directory to verify code quality.
 
 # Directory Structure
 - sdk: This is an SDK to embed in websites you want to analyze, to record visitor history.
 - console: This is a console application to analyze customer interests based on their page visit history.
+- sample-site: This is a sample website that uses the SDK to record visitor history.
 
 # Workflow
 This project uses [Jujutsu (jj)](https://github.com/martinvonz/jj) for version control.

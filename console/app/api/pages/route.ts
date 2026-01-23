@@ -16,14 +16,12 @@ export async function GET() {
         importedAt: pages.importedAt,
         baseUrl: pages.baseUrl,
         totalDuration: sql<number>`COALESCE(SUM(${pathDurations.duration}), 0)`.as(
-          "total_duration"
+          "total_duration",
         ),
-        avgDuration: sql<number>`COALESCE(AVG(${pathDurations.duration}), 0)`.as(
-          "avg_duration"
-        ),
+        avgDuration: sql<number>`COALESCE(AVG(${pathDurations.duration}), 0)`.as("avg_duration"),
         visitCount: sql<number>`COUNT(${pathDurations.id})`.as("visit_count"),
         uniqueVisitors: sql<number>`COUNT(DISTINCT ${pathDurations.visitorId})`.as(
-          "unique_visitors"
+          "unique_visitors",
         ),
       })
       .from(pages)
@@ -34,9 +32,6 @@ export async function GET() {
     return NextResponse.json({ pages: pagesWithAnalytics });
   } catch (error) {
     console.error("Error fetching pages:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

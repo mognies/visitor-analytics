@@ -1,0 +1,10 @@
+{
+  "tasks": {
+    "check": {
+      "dependsOn": ["^check"]
+    },
+    "fix": {
+      "dependsOn": ["^fix"]
+    }
+  }
+}

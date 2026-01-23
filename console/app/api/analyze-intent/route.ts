@@ -22,10 +22,7 @@ export async function POST(request: NextRequest) {
     const { visitorId, paths } = body;
 
     if (!visitorId || !paths || paths.length === 0) {
-      return NextResponse.json(
-        { error: "visitorId and paths are required" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: "visitorId and paths are required" }, { status: 400 });
     }
 
     // Check for API key

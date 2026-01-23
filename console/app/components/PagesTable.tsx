@@ -73,9 +73,7 @@ export default function PagesTable({ refresh }: { refresh: number }) {
       <div className="bg-white rounded-2xl shadow-lg p-8">
         <div className="flex items-center justify-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-          <span className="ml-3 text-slate-600 font-medium">
-            Loading pages...
-          </span>
+          <span className="ml-3 text-slate-600 font-medium">Loading pages...</span>
         </div>
       </div>
     );
@@ -85,12 +83,7 @@ export default function PagesTable({ refresh }: { refresh: number }) {
     return (
       <div className="bg-white rounded-2xl shadow-lg p-8">
         <div className="flex items-center text-red-600">
-          <svg
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
+          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -110,14 +103,10 @@ export default function PagesTable({ refresh }: { refresh: number }) {
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-xl font-bold text-slate-900">Imported Pages</h2>
-            <p className="text-sm text-slate-600 mt-1">
-              {data?.pages.length || 0} pages indexed
-            </p>
+            <p className="text-sm text-slate-600 mt-1">{data?.pages.length || 0} pages indexed</p>
           </div>
           <div className="bg-blue-100 rounded-full px-4 py-2">
-            <span className="text-sm font-bold text-blue-700">
-              {data?.pages.length || 0}
-            </span>
+            <span className="text-sm font-bold text-blue-700">{data?.pages.length || 0}</span>
           </div>
         </div>
       </div>
@@ -165,12 +154,8 @@ export default function PagesTable({ refresh }: { refresh: number }) {
                       d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                     />
                   </svg>
-                  <p className="mt-4 text-slate-500 font-medium">
-                    No pages imported yet
-                  </p>
-                  <p className="text-sm text-slate-400">
-                    Use the form above to import pages
-                  </p>
+                  <p className="mt-4 text-slate-500 font-medium">No pages imported yet</p>
+                  <p className="text-sm text-slate-400">Use the form above to import pages</p>
                 </td>
               </tr>
             ) : (
@@ -180,9 +165,7 @@ export default function PagesTable({ refresh }: { refresh: number }) {
                   <Fragment key={page.id}>
                     <tr
                       key={page.id}
-                      onClick={() =>
-                        setExpandedPageId(isExpanded ? null : page.id)
-                      }
+                      onClick={() => setExpandedPageId(isExpanded ? null : page.id)}
                       className={`hover:bg-slate-50 transition-colors cursor-pointer ${
                         isExpanded ? "bg-blue-50" : ""
                       }`}

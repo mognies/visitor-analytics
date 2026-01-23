@@ -32,8 +32,7 @@ export default function VisitorAnalytics() {
   const [intentAnalysis, setIntentAnalysis] = useState<string | null>(null);
   const [generatingGreeting, setGeneratingGreeting] = useState(false);
   const [greetingMessage, setGreetingMessage] = useState<string | null>(null);
-  const [selectedModel, setSelectedModel] =
-    useState<string>("gemini-2.5-flash");
+  const [selectedModel, setSelectedModel] = useState<string>("gemini-2.5-flash");
 
   const closeModal = () => {
     setSelectedVisitor(null);
@@ -48,9 +47,7 @@ export default function VisitorAnalytics() {
       if (!response.ok) throw new Error("Failed to fetch visitor analytics");
       const result = await response.json();
       // Sort visitors by lastVisit descending (most recent first)
-      result.visitors.sort(
-        (a: Visitor, b: Visitor) => b.lastVisit - a.lastVisit,
-      );
+      result.visitors.sort((a: Visitor, b: Visitor) => b.lastVisit - a.lastVisit);
       setData(result);
       setError(null);
     } catch (err) {
@@ -201,9 +198,7 @@ export default function VisitorAnalytics() {
       setGreetingMessage(data.greeting);
     } catch (error) {
       console.error("Failed to generate greeting:", error);
-      setGreetingMessage(
-        "接客文章の生成に失敗しました。もう一度お試しください。",
-      );
+      setGreetingMessage("接客文章の生成に失敗しました。もう一度お試しください。");
     } finally {
       setGeneratingGreeting(false);
     }
@@ -214,9 +209,7 @@ export default function VisitorAnalytics() {
       <div className="flex items-center justify-center p-12">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-          <p className="mt-4 text-slate-600 font-medium">
-            Loading visitor analytics...
-          </p>
+          <p className="mt-4 text-slate-600 font-medium">Loading visitor analytics...</p>
         </div>
       </div>
     );
@@ -265,9 +258,7 @@ export default function VisitorAnalytics() {
               d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
             />
           </svg>
-          <p className="mt-4 text-slate-500 font-medium">
-            No visitor data available yet
-          </p>
+          <p className="mt-4 text-slate-500 font-medium">No visitor data available yet</p>
           <p className="text-sm text-slate-400 mt-1">
             Visit some pages to see visitor analytics here
           </p>
@@ -283,18 +274,11 @@ export default function VisitorAnalytics() {
         <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl shadow-lg p-6 text-white transform hover:scale-105 transition-transform cursor-pointer">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-purple-100 text-sm font-medium mb-1">
-                Total Visitors
-              </p>
+              <p className="text-purple-100 text-sm font-medium mb-1">Total Visitors</p>
               <p className="text-3xl font-bold">{data.totalVisitors}</p>
             </div>
             <div className="bg-white/20 rounded-full p-3">
-              <svg
-                className="w-8 h-8"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
+              <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -309,20 +293,13 @@ export default function VisitorAnalytics() {
         <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl shadow-lg p-6 text-white transform hover:scale-105 transition-transform cursor-pointer">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-blue-100 text-sm font-medium mb-1">
-                Total Page Views
-              </p>
+              <p className="text-blue-100 text-sm font-medium mb-1">Total Page Views</p>
               <p className="text-3xl font-bold">
                 {data.visitors.reduce((sum, v) => sum + v.visitCount, 0)}
               </p>
             </div>
             <div className="bg-white/20 rounded-full p-3">
-              <svg
-                className="w-8 h-8"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
+              <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -343,22 +320,13 @@ export default function VisitorAnalytics() {
         <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-2xl shadow-lg p-6 text-white transform hover:scale-105 transition-transform cursor-pointer">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-green-100 text-sm font-medium mb-1">
-                Total Time Spent
-              </p>
+              <p className="text-green-100 text-sm font-medium mb-1">Total Time Spent</p>
               <p className="text-3xl font-bold">
-                {formatDuration(
-                  data.visitors.reduce((sum, v) => sum + v.totalDuration, 0),
-                )}
+                {formatDuration(data.visitors.reduce((sum, v) => sum + v.totalDuration, 0))}
               </p>
             </div>
             <div className="bg-white/20 rounded-full p-3">
-              <svg
-                className="w-8 h-8"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
+              <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -473,9 +441,7 @@ export default function VisitorAnalytics() {
           >
             <div className="px-6 py-5 border-b border-slate-200 bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-between">
               <div>
-                <h3 className="text-xl font-bold text-white">
-                  Visitor Journey
-                </h3>
+                <h3 className="text-xl font-bold text-white">Visitor Journey</h3>
                 <p className="text-sm text-blue-100 font-mono mt-1">
                   ID: {selectedVisitor.visitorId}
                 </p>
@@ -484,12 +450,7 @@ export default function VisitorAnalytics() {
                 onClick={closeModal}
                 className="text-white hover:bg-white/20 rounded-lg p-2 transition-colors cursor-pointer"
               >
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -507,37 +468,25 @@ export default function VisitorAnalytics() {
                   <div className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">
                     {formatDuration(selectedVisitor.totalDuration)}
                   </div>
-                  <div className="text-xs text-slate-600 font-medium mt-1">
-                    Total Time
-                  </div>
+                  <div className="text-xs text-slate-600 font-medium mt-1">Total Time</div>
                 </div>
                 <div className="bg-white rounded-xl shadow p-4 border border-slate-200">
                   <div className="text-2xl font-bold bg-gradient-to-r from-green-600 to-green-700 bg-clip-text text-transparent">
                     {selectedVisitor.visitCount}
                   </div>
-                  <div className="text-xs text-slate-600 font-medium mt-1">
-                    Page Views
-                  </div>
+                  <div className="text-xs text-slate-600 font-medium mt-1">Page Views</div>
                 </div>
                 <div className="bg-white rounded-xl shadow p-4 border border-slate-200">
                   <div className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-purple-700 bg-clip-text text-transparent">
                     {selectedVisitor.uniquePaths}
                   </div>
-                  <div className="text-xs text-slate-600 font-medium mt-1">
-                    Unique Pages
-                  </div>
+                  <div className="text-xs text-slate-600 font-medium mt-1">Unique Pages</div>
                 </div>
                 <div className="bg-white rounded-xl shadow p-4 border border-slate-200">
                   <div className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-orange-700 bg-clip-text text-transparent">
-                    {Math.floor(
-                      selectedVisitor.totalDuration /
-                        selectedVisitor.visitCount,
-                    ) / 1000}
-                    s
+                    {Math.floor(selectedVisitor.totalDuration / selectedVisitor.visitCount) / 1000}s
                   </div>
-                  <div className="text-xs text-slate-600 font-medium mt-1">
-                    Avg per Page
-                  </div>
+                  <div className="text-xs text-slate-600 font-medium mt-1">Avg per Page</div>
                 </div>
               </div>
 
@@ -660,8 +609,7 @@ export default function VisitorAnalytics() {
                       Click "Analyze Intent" to understand visitor behavior
                     </p>
                     <p className="text-xs text-slate-400 mt-1">
-                      AI will analyze the visit timeline to identify patterns
-                      and intent
+                      AI will analyze the visit timeline to identify patterns and intent
                     </p>
                   </div>
                 )}
@@ -713,13 +661,9 @@ export default function VisitorAnalytics() {
                       disabled={generatingGreeting}
                       className="px-3 py-2 border border-slate-300 rounded-lg text-sm font-medium text-slate-700 bg-white hover:border-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed"
                     >
-                      <option value="gemini-2.5-flash-lite">
-                        Gemini 2.5 Flash Lite
-                      </option>
+                      <option value="gemini-2.5-flash-lite">Gemini 2.5 Flash Lite</option>
                       <option value="gemini-2.5-flash">Gemini 2.5 Flash</option>
-                      <option value="gemini-3-flash-preview">
-                        Gemini 3 Flash Preview
-                      </option>
+                      <option value="gemini-3-flash-preview">Gemini 3 Flash Preview</option>
                     </select>
                     <button
                       onClick={handleGenerateGreeting}
@@ -847,51 +791,49 @@ export default function VisitorAnalytics() {
                   Visit Timeline
                 </h4>
                 <div className="space-y-3 max-h-96 overflow-y-auto">
-                  {groupConsecutivePaths(selectedVisitor.paths).map(
-                    (group, index) => (
-                      <div
-                        key={index}
-                        className="bg-slate-50 border border-slate-200 p-4 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-all cursor-pointer"
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="flex-1">
-                            <div className="flex items-center">
-                              <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
-                                <svg
-                                  className="w-5 h-5 text-blue-600"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  stroke="currentColor"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                                  />
-                                </svg>
+                  {groupConsecutivePaths(selectedVisitor.paths).map((group, index) => (
+                    <div
+                      key={index}
+                      className="bg-slate-50 border border-slate-200 p-4 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-all cursor-pointer"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center">
+                            <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
+                              <svg
+                                className="w-5 h-5 text-blue-600"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                />
+                              </svg>
+                            </div>
+                            <div>
+                              <div className="text-sm font-semibold text-slate-900">
+                                {group.path}
                               </div>
-                              <div>
-                                <div className="text-sm font-semibold text-slate-900">
-                                  {group.path}
-                                </div>
-                                <div className="text-xs text-slate-500 mt-0.5">
-                                  {group.count > 1
-                                    ? `${formatDate(group.firstTimestamp)} - ${formatDate(group.lastTimestamp)}`
-                                    : formatDate(group.firstTimestamp)}
-                                </div>
+                              <div className="text-xs text-slate-500 mt-0.5">
+                                {group.count > 1
+                                  ? `${formatDate(group.firstTimestamp)} - ${formatDate(group.lastTimestamp)}`
+                                  : formatDate(group.firstTimestamp)}
                               </div>
                             </div>
                           </div>
-                          <div className="ml-4">
-                            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-gradient-to-r from-blue-500 to-blue-600 text-white">
-                              {formatDuration(group.totalDuration)}
-                            </span>
-                          </div>
+                        </div>
+                        <div className="ml-4">
+                          <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+                            {formatDuration(group.totalDuration)}
+                          </span>
                         </div>
                       </div>
-                    ),
-                  )}
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>

@@ -61,9 +61,7 @@ async function scrape(url: string, maxPages: number = 100) {
       },
     });
 
-    console.log(
-      `\nCrawl completed! Total pages: ${crawlResult.data?.length || 0}`,
-    );
+    console.log(`\nCrawl completed! Total pages: ${crawlResult.data?.length || 0}`);
 
     // Process the data
     if (crawlResult.data && crawlResult.data.length > 0) {

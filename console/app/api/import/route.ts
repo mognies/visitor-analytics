@@ -23,10 +23,7 @@ export async function POST(request: NextRequest) {
     // Check for Firecrawl API key
     const apiKey = process.env.FIRECRAWL_API_KEY;
     if (!apiKey) {
-      return NextResponse.json(
-        { error: "FIRECRAWL_API_KEY not configured" },
-        { status: 500 },
-      );
+      return NextResponse.json({ error: "FIRECRAWL_API_KEY not configured" }, { status: 500 });
     }
 
     // Initialize Firecrawl (v2)
@@ -61,8 +58,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       jobId: crawlResponse.id,
-      message:
-        "Crawl job started. Data will be imported automatically when complete.",
+      message: "Crawl job started. Data will be imported automatically when complete.",
     });
   } catch (error) {
     console.error("Error starting crawl job:", error);

@@ -23,10 +23,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (!id) {
-      return NextResponse.json(
-        { error: "Job ID is required" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: "Job ID is required" }, { status: 400 });
     }
 
     // Update job status

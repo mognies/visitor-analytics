@@ -1,0 +1,11 @@
+
+[0m[2m[35m$[0m [2m[1mrun-p check:*[0m
+[0m[2m[35m$[0m [2m[1moxlint[0m
+[0m[2m[35m$[0m [2m[1mtsc --noEmit[0m
+[0m[2m[35m$[0m [2m[1moxfmt --check[0m
+Found 0 warnings and 0 errors.
+Finished in 26ms on 6 files with 90 rules using 10 threads.
+Checking formatting...
+
+All matched files use the correct format.
+Finished in 273ms on 12 files using 10 threads.

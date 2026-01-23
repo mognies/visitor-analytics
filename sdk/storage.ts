@@ -36,9 +36,7 @@ function openDatabase(): Promise<IDBDatabase> {
   return dbPromise;
 }
 
-export async function savePathDuration(
-  duration: PathDuration,
-): Promise<number> {
+export async function savePathDuration(duration: PathDuration): Promise<number> {
   const db = await openDatabase();
   return new Promise((resolve, reject) => {
     const transaction = db.transaction([PATH_STORE], "readwrite");

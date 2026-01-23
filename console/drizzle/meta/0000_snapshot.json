@@ -67,12 +67,7 @@
       "indexes": {
         "block_durations_unique_visit": {
           "name": "block_durations_unique_visit",
-          "columns": [
-            "visitor_id",
-            "block_id",
-            "path",
-            "timestamp"
-          ],
+          "columns": ["visitor_id", "block_id", "path", "timestamp"],
           "isUnique": true
         }
       },
@@ -255,9 +250,7 @@
       "indexes": {
         "pages_url_unique": {
           "name": "pages_url_unique",
-          "columns": [
-            "url"
-          ],
+          "columns": ["url"],
           "isUnique": true
         }
       },
@@ -322,11 +315,7 @@
       "indexes": {
         "path_durations_unique_visit": {
           "name": "path_durations_unique_visit",
-          "columns": [
-            "visitor_id",
-            "path",
-            "timestamp"
-          ],
+          "columns": ["visitor_id", "path", "timestamp"],
           "isUnique": true
         }
       },
