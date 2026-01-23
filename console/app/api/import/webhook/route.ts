@@ -15,10 +15,18 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { success, id, status, data } = body;
 
-    console.log("Webhook received:", { success, id, status, dataLength: data?.length });
+    console.log("Webhook received:", {
+      success,
+      id,
+      status,
+      dataLength: data?.length,
+    });
 
     if (!id) {
-      return NextResponse.json({ error: "Job ID is required" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Job ID is required" },
+        { status: 400 },
+      );
     }
 
     // Update job status
@@ -61,7 +69,7 @@ export async function POST(request: NextRequest) {
           title: (page.metadata?.title as string) || "",
           summary: page.summary ?? "",
         });
-      } catch (e) {
+      } catch {
         console.error(`Invalid URL in crawl results: ${pageUrl}`);
       }
     }

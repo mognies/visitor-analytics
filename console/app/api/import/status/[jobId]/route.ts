@@ -68,7 +68,7 @@ export async function GET(
             title: (page.metadata?.title as string) || "",
             summary: page.summary ?? "",
           });
-        } catch (e) {
+        } catch {
           console.error(`Invalid URL in crawl results: ${pageUrl}`);
         }
       }

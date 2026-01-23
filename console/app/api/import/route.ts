@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     let baseUrl: URL;
     try {
       baseUrl = new URL(url);
-    } catch (e) {
+    } catch {
       return NextResponse.json({ error: "Invalid URL" }, { status: 400 });
     }
 
