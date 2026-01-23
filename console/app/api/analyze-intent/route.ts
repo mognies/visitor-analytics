@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { generateText } from "ai";
 import { google } from "@ai-sdk/google";
 import { db } from "@/db";
-import { blockDurations, pageBlocks, pages } from "@/db/schema";
-import { and, eq, inArray } from "drizzle-orm";
+import { pages } from "@/db/schema";
+import { inArray } from "drizzle-orm";
 
 interface VisitorPath {
   path: string;
@@ -50,68 +50,16 @@ export async function POST(request: NextRequest) {
       .from(pages)
       .where(inArray(pages.path, uniquePaths));
 
-    const blockDurationRows = await db
-      .select({
-        blockId: blockDurations.blockId,
-        path: blockDurations.path,
-        duration: blockDurations.duration,
-        timestamp: blockDurations.timestamp,
-      })
-      .from(blockDurations)
-      .where(
-        and(
-          eq(blockDurations.visitorId, visitorId),
-          inArray(blockDurations.path, uniquePaths),
-        ),
-      );
-
-    const blockIds = [...new Set(blockDurationRows.map((row) => row.blockId))];
-    const numericBlockIds = blockIds
-      .map((blockId) => Number(blockId))
-      .filter((blockId) => Number.isFinite(blockId));
-
-    const blockInfoRows =
-      numericBlockIds.length > 0
-        ? await db
-            .select({
-              id: pageBlocks.id,
-              blockName: pageBlocks.blockName,
-              blockSummary: pageBlocks.blockSummary,
-              blockDom: pageBlocks.blockDom,
-            })
-            .from(pageBlocks)
-            .where(inArray(pageBlocks.id, numericBlockIds))
-        : [];
-
-    const blockInfoMap = new Map(
-      blockInfoRows.map((block) => [
-        String(block.id),
-        {
-          blockName: block.blockName,
-          blockSummary: block.blockSummary,
-          blockDom: block.blockDom,
-        },
-      ]),
-    );
-
     // Create a map of path -> page info
     const pageInfoMap = new Map(
       pageInfos.map((p) => [p.path, { title: p.title, summary: p.summary }]),
     );
 
-    // Group paths by date and calculate total duration per page
+    // Group paths by date
     const visitsByDate: Record<
       string,
       { path: string; duration: number; timestamp: number; index: number }[]
     > = {};
-    const pathsByDate: Record<string, Record<string, number>> = {};
-    const pathTotals: Record<string, number> = {};
-    const blockDurationsByDate: Record<
-      string,
-      Record<string, Record<string, number>>
-    > = {};
-    const blockTotals: Record<string, number> = {};
-    const blockTotalsByPath: Record<string, Record<string, number>> = {};
 
     for (const [index, path] of paths.entries()) {
       const date = new Date(path.timestamp).toISOString().split("T")[0];
@@ -124,45 +72,6 @@ export async function POST(request: NextRequest) {
         timestamp: path.timestamp,
         index,
       });
-      if (!pathsByDate[date]) {
-        pathsByDate[date] = {};
-      }
-      if (!pathsByDate[date][path.path]) {
-        pathsByDate[date][path.path] = 0;
-      }
-      pathsByDate[date][path.path] += path.duration;
-
-      if (!pathTotals[path.path]) {
-        pathTotals[path.path] = 0;
-      }
-      pathTotals[path.path] += path.duration;
-    }
-
-    for (const block of blockDurationRows) {
-      const date = new Date(block.timestamp).toISOString().split("T")[0];
-      if (!blockDurationsByDate[date]) {
-        blockDurationsByDate[date] = {};
-      }
-      if (!blockDurationsByDate[date][block.path]) {
-        blockDurationsByDate[date][block.path] = {};
-      }
-      if (!blockDurationsByDate[date][block.path][block.blockId]) {
-        blockDurationsByDate[date][block.path][block.blockId] = 0;
-      }
-      blockDurationsByDate[date][block.path][block.blockId] += block.duration;
-
-      if (!blockTotals[block.blockId]) {
-        blockTotals[block.blockId] = 0;
-      }
-      blockTotals[block.blockId] += block.duration;
-
-      if (!blockTotalsByPath[block.path]) {
-        blockTotalsByPath[block.path] = {};
-      }
-      if (!blockTotalsByPath[block.path][block.blockId]) {
-        blockTotalsByPath[block.path][block.blockId] = 0;
-      }
-      blockTotalsByPath[block.path][block.blockId] += block.duration;
     }
 
     // Format duration
@@ -199,25 +108,6 @@ export async function POST(request: NextRequest) {
         }
         if (pageInfo?.summary) {
           prompt += `  概要: ${pageInfo.summary}\n`;
-        }
-
-        const blockDurationsForPath = blockDurationsByDate[date]?.[path] ?? {};
-        const blockEntries = Object.entries(blockDurationsForPath).sort(
-          ([blockIdA], [blockIdB]) =>
-            String(blockIdA).localeCompare(String(blockIdB)),
-        );
-        if (blockEntries.length > 0) {
-          prompt += "  ブロック別の滞在:\n";
-          for (const [blockId, duration] of blockEntries) {
-            const blockInfo = blockInfoMap.get(String(blockId));
-            const blockLabel = blockInfo?.blockName
-              ? `${blockInfo.blockName}`
-              : `Block ${blockId}`;
-            prompt += `  - ${blockLabel}: ${formatDuration(duration)}\n`;
-            if (blockInfo?.blockSummary) {
-              prompt += `    概要: ${blockInfo.blockSummary}\n`;
-            }
-          }
         }
       }
       prompt += "\n";

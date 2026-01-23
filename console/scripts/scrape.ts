@@ -10,15 +10,11 @@
  *   bun run scripts/scrape.ts https://example.com 50
  */
 
-import { google } from "@ai-sdk/google";
 import { FirecrawlClient } from "@mendable/firecrawl-js";
-import { generateText, Output } from "ai";
 import * as dotenv from "dotenv";
-import { eq } from "drizzle-orm";
-import z from "zod";
 
 import { db } from "../db";
-import { pageBlocks, pages } from "../db/schema";
+import { pages } from "../db/schema";
 
 // Load environment variables
 dotenv.config({ path: ".env.local" });
@@ -28,56 +24,6 @@ interface CrawledPage {
   path: string;
   title: string;
   summary: string;
-}
-
-/**
- * Clean HTML by removing unnecessary tags and content to reduce token count
- */
-function cleanHtml(html: string): string {
-  return (
-    html
-      // Remove script tags and their content
-      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
-      // Remove style tags and their content
-      .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, "")
-      // Remove noscript tags
-      .replace(/<noscript\b[^<]*(?:(?!<\/noscript>)<[^<]*)*<\/noscript>/gi, "")
-      // Remove img tags (not needed for block analysis)
-      .replace(/<img\b[^>]*>/gi, "")
-      // Remove svg tags and their content
-      .replace(/<svg\b[^<]*(?:(?!<\/svg>)<[^<]*)*<\/svg>/gi, "")
-      // Remove HTML comments
-      .replace(/<!--[\s\S]*?-->/g, "")
-      // Remove head section (title already captured in metadata)
-      .replace(/<head\b[^<]*(?:(?!<\/head>)<[^<]*)*<\/head>/gi, "")
-      // Remove inline style attributes
-      .replace(/\sstyle="[^"]*"/gi, "")
-      // Remove data-* attributes
-      .replace(/\sdata-[a-z-]+="[^"]*"/gi, "")
-      // Remove aria-* attributes (but keep IDs and classes for blockDOM)
-      .replace(/\saria-[a-z-]+="[^"]*"/gi, "")
-      // Remove role attributes
-      .replace(/\srole="[^"]*"/gi, "")
-      // Remove title attributes
-      .replace(/\stitle="[^"]*"/gi, "")
-      // Remove href attributes (URLs not needed for block analysis)
-      .replace(/\shref="[^"]*"/gi, "")
-      // Remove src attributes (URLs not needed for block analysis)
-      .replace(/\ssrc="[^"]*"/gi, "")
-      // Remove srcset attributes
-      .replace(/\ssrcset="[^"]*"/gi, "")
-      // Remove target, rel attributes
-      .replace(/\s(target|rel)="[^"]*"/gi, "")
-      // Remove whitespace between tags
-      .replace(/>\s+</g, "><")
-      // Compress remaining whitespace (including within text content)
-      .replace(/\s+/g, " ")
-      .trim()
-      // Remove empty tags (run multiple times to handle nested empty tags)
-      .replace(/<(\w+)\b[^>]*>\s*<\/\1>/gi, "")
-      .replace(/<(\w+)\b[^>]*>\s*<\/\1>/gi, "")
-      .replace(/<(\w+)\b[^>]*>\s*<\/\1>/gi, "")
-  );
 }
 
 async function scrape(url: string, maxPages: number = 100) {
@@ -153,47 +99,6 @@ async function scrape(url: string, maxPages: number = 100) {
                 importedAt: Date.now(),
               },
             });
-
-          const storedPage = await db.query.pages.findFirst({
-            where: eq(pages.url, pageUrl),
-          });
-
-          console.log(`Analysing page ${page.metadata?.url}`);
-          // Clean HTML to reduce token count
-          const cleanedHtml = cleanHtml(page.html || "");
-          console.log(
-            `Original HTML length: ${page.html?.length || 0}, Cleaned: ${cleanedHtml.length}`,
-          );
-
-          // Generate analysis using Gemini
-          const { output: blocks } = await generateText({
-            model: google("gemini-3-flash-preview"),
-            prompt: `以下のHTMLを、人間が自然にひとまとまりと認識するセクション/ブロック単位に分解し、日本語で出力してください。${cleanedHtml}`,
-            output: Output.object({
-              schema: z.array(
-                z.object({
-                  blockName: z.string(),
-                  blockSummary: z.string(),
-                  blockDOM: z.string().describe("ID or class name"),
-                }),
-              ),
-            }),
-          });
-
-          if (storedPage && blocks.length > 0) {
-            await db
-              .delete(pageBlocks)
-              .where(eq(pageBlocks.pageId, storedPage.id));
-
-            await db.insert(pageBlocks).values(
-              blocks.map((block) => ({
-                pageId: storedPage.id,
-                blockName: block.blockName,
-                blockSummary: block.blockSummary,
-                blockDom: block.blockDOM,
-              })),
-            );
-          }
         } catch (e) {
           console.error(e);
           console.error(`Invalid URL in crawl results: ${pageUrl}`);
