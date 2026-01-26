@@ -16,6 +16,7 @@ interface GenerateGreetingRequest {
   paths: VisitorPath[];
   model?: string;
   intentAnalysis?: string;
+  customPrompt?: string;
 }
 
 interface DetailedVisitorData {
@@ -76,7 +77,7 @@ async function fetchDetailedVisitorData(
 export async function POST(request: NextRequest) {
   try {
     const body: GenerateGreetingRequest = await request.json();
-    const { visitorId, paths, model = "gemini-2.5-flash", intentAnalysis } = body;
+    const { visitorId, paths, model = "gemini-2.5-flash", intentAnalysis, customPrompt } = body;
 
     if (!visitorId || !paths || paths.length === 0) {
       return NextResponse.json({ error: "visitorId and paths are required" }, { status: 400 });
@@ -119,65 +120,103 @@ export async function POST(request: NextRequest) {
     // Build prompt
     let prompt = "";
 
-    // Add intent analysis if available
-    if (intentAnalysis) {
-      prompt = `以下の訪問者の意図分析をもとに、この訪問者に対する1行の接客文章を生成してください。
+    // Use custom prompt if provided
+    if (customPrompt) {
+      // Replace placeholders in custom prompt
+      prompt = customPrompt;
+
+      // Replace {intentAnalysis} placeholder
+      if (intentAnalysis) {
+        prompt = prompt.replace(/{intentAnalysis}/g, intentAnalysis);
+      }
+
+      // Replace {visitHistory} placeholder if detailed data is available
+      if (!intentAnalysis && detailedData) {
+        const { pageInfoMap, visitsByDate } = detailedData;
+        let visitHistoryText = "";
+
+        const sortedDates = Object.keys(visitsByDate).sort();
+        for (const date of sortedDates) {
+          const visits = visitsByDate[date]
+            .slice()
+            .sort((a, b) => a.timestamp - b.timestamp || a.index - b.index);
+          visitHistoryText += `### ${date}\n`;
+          for (const visit of visits) {
+            const path = visit.path;
+            const duration = visit.duration;
+            const pageInfo = pageInfoMap.get(path);
+            visitHistoryText += `- **${path}** (${formatDuration(duration)})\n`;
+            if (pageInfo?.title) {
+              visitHistoryText += `  タイトル: ${pageInfo.title}\n`;
+            }
+            if (pageInfo?.summary) {
+              visitHistoryText += `  概要: ${pageInfo.summary}\n`;
+            }
+          }
+          visitHistoryText += "\n";
+        }
+
+        prompt = prompt.replace(/{visitHistory}/g, visitHistoryText);
+      }
+    } else {
+      // Use default prompt logic if no custom prompt
+      // Add intent analysis if available
+      if (intentAnalysis) {
+        prompt = `以下の訪問者の意図分析をもとに、この訪問者に対する1行の接客文章を生成してください。
 
 ## AI Intent Analysis:
 
 ${intentAnalysis}
 
 このデータをもとに、以下の要件を満たす接客文章を生成してください:`;
-    } else if (detailedData) {
-      const { pageInfoMap, visitsByDate } = detailedData;
+      } else if (detailedData) {
+        const { pageInfoMap, visitsByDate } = detailedData;
 
-      prompt = `以下の訪問者の行動履歴をもとに、この訪問者に対する1行の接客文章を生成してください。
+        prompt = `以下の訪問者の行動履歴をもとに、この訪問者に対する1行の接客文章を生成してください。
 
 ## 日付別の訪問履歴:
 
 `;
 
-      // Add date-based visit history
-      const sortedDates = Object.keys(visitsByDate).sort();
-      for (const date of sortedDates) {
-        const visits = visitsByDate[date]
-          .slice()
-          .sort((a, b) => a.timestamp - b.timestamp || a.index - b.index);
-        prompt += `### ${date}\n`;
-        for (const visit of visits) {
-          const path = visit.path;
-          const duration = visit.duration;
-          const pageInfo = pageInfoMap.get(path);
-          prompt += `- **${path}** (${formatDuration(duration)})\n`;
-          if (pageInfo?.title) {
-            prompt += `  タイトル: ${pageInfo.title}\n`;
+        // Add date-based visit history
+        const sortedDates = Object.keys(visitsByDate).sort();
+        for (const date of sortedDates) {
+          const visits = visitsByDate[date]
+            .slice()
+            .sort((a, b) => a.timestamp - b.timestamp || a.index - b.index);
+          prompt += `### ${date}\n`;
+          for (const visit of visits) {
+            const path = visit.path;
+            const duration = visit.duration;
+            const pageInfo = pageInfoMap.get(path);
+            prompt += `- **${path}** (${formatDuration(duration)})\n`;
+            if (pageInfo?.title) {
+              prompt += `  タイトル: ${pageInfo.title}\n`;
+            }
+            if (pageInfo?.summary) {
+              prompt += `  概要: ${pageInfo.summary}\n`;
+            }
           }
-          if (pageInfo?.summary) {
-            prompt += `  概要: ${pageInfo.summary}\n`;
-          }
+          prompt += "\n";
         }
-        prompt += "\n";
+
+        prompt += `
+
+このデータをもとに、以下の要件を満たす接客文章を生成してください:`;
+      } else {
+        return NextResponse.json(
+          { error: "Either intentAnalysis or visitor data is required" },
+          { status: 400 },
+        );
       }
 
       prompt += `
-
-このデータをもとに、以下の要件を満たす接客文章を生成してください:`;
-    } else {
-      return NextResponse.json(
-        { error: "Either intentAnalysis or visitor data is required" },
-        { status: 400 },
-      );
-    }
-
-    prompt += `
 1. 訪問者の関心事やニーズを的確に捉えた内容にする
-2. 具体的なページやコンテンツに言及して親近感を演出する
-3. 自然で温かみのある日本語表現を使う
-4. 1行（60文字以内）で完結させる
-5. 訪問者の次のアクションを促すような内容にする
-6. AI Botの立場として声をかける
-
-セカンドアプローチとしての、接客文章のみを返してください。余計な説明や挨拶は不要です。`;
+2. 1行（60文字以内）で完結させる
+3. 訪問者の次のアクションを促すような内容にする
+4. AI Botの立場として声をかける
+5. セカンドアプローチとしての、接客文章のみを返す。（余計な説明や挨拶は不要）`;
+    }
 
     console.log(prompt);
     // Generate greeting using Gemini

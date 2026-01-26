@@ -33,6 +33,34 @@ export default function VisitorAnalytics() {
   const [generatingGreeting, setGeneratingGreeting] = useState(false);
   const [greetingMessage, setGreetingMessage] = useState<string | null>(null);
   const [selectedModel, setSelectedModel] = useState<string>("gemini-2.5-flash");
+  const [customPrompt, setCustomPrompt] = useState<string>("");
+  const [useCustomPrompt, setUseCustomPrompt] = useState<boolean>(false);
+
+  const defaultPrompt = intentAnalysis
+    ? `以下の訪問者の意図分析をもとに、この訪問者に対する1行の接客文章を生成してください。
+
+# AI Intent Analysis:
+
+{intentAnalysis}
+
+このデータをもとに、以下の要件を満たす接客文章を生成してください:
+1. 訪問者の関心事やニーズを的確に捉えた内容にする
+2. 1行（60文字以内）で完結させる
+3. 訪問者の次のアクションを促すような内容にする
+4. AI Botの立場として声をかける
+5. セカンドアプローチとしての、接客文章のみを返す。（余計な説明や挨拶は不要）
+`
+    : `以下の訪問者の行動履歴をもとに、この訪問者に対する接客文章を生成してください。
+## 日付別の訪問履歴:
+
+{visitHistory}
+
+このデータをもとに、以下の要件を満たす接客文章を生成してください:
+1. 訪問者の関心事やニーズを的確に捉えた内容にする
+2. 1行（60文字以内）で完結させる
+3. 訪問者の次のアクションを促すような内容にする
+4. AI Botの立場として声をかける
+5. セカンドアプローチとしての、接客文章のみを返す。（余計な説明や挨拶は不要）`;
 
   const closeModal = () => {
     setSelectedVisitor(null);
@@ -177,17 +205,29 @@ export default function VisitorAnalytics() {
     setGreetingMessage(null);
 
     try {
+      const requestBody: {
+        visitorId: string;
+        paths: VisitorPath[];
+        model: string;
+        intentAnalysis?: string;
+        customPrompt?: string;
+      } = {
+        visitorId: selectedVisitor.visitorId,
+        paths: selectedVisitor.paths,
+        model: selectedModel,
+        intentAnalysis: intentAnalysis || undefined,
+      };
+
+      if (useCustomPrompt && customPrompt.trim()) {
+        requestBody.customPrompt = customPrompt;
+      }
+
       const response = await fetch("/api/generate-greeting", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          visitorId: selectedVisitor.visitorId,
-          paths: selectedVisitor.paths,
-          model: selectedModel,
-          intentAnalysis: intentAnalysis || undefined,
-        }),
+        body: JSON.stringify(requestBody),
       });
 
       if (!response.ok) {
@@ -718,6 +758,51 @@ export default function VisitorAnalytics() {
                     </button>
                   </div>
                 </div>
+
+                {/* Custom Prompt Toggle */}
+                <div className="mb-4">
+                  <label className="flex items-center space-x-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={useCustomPrompt}
+                      onChange={(e) => setUseCustomPrompt(e.target.checked)}
+                      className="w-4 h-4 text-green-600 border-slate-300 rounded focus:ring-green-500"
+                    />
+                    <span className="text-sm font-medium text-slate-700">
+                      カスタムプロンプトを使用
+                    </span>
+                    <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-600">
+                      高度な設定
+                    </span>
+                  </label>
+                </div>
+
+                {/* Custom Prompt Input */}
+                {useCustomPrompt && (
+                  <div className="mb-4">
+                    <label className="block text-xs font-semibold text-slate-700 mb-2">
+                      プロンプトテンプレート
+                      <span className="ml-2 text-slate-500 font-normal">
+                        (プレースホルダー: {"{intentAnalysis}"}, {"{visitHistory}"})
+                      </span>
+                    </label>
+                    <textarea
+                      value={customPrompt || defaultPrompt}
+                      onChange={(e) => setCustomPrompt(e.target.value)}
+                      rows={12}
+                      className="w-full px-4 py-3 border border-slate-300 rounded-lg text-sm font-mono text-slate-700 bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none"
+                    />
+                    <p className="mt-2 text-xs text-slate-500">
+                      💡 ヒント:{" "}
+                      <code className="bg-slate-100 px-1 py-0.5 rounded">{"{intentAnalysis}"}</code>{" "}
+                      は分析結果に、
+                      <code className="bg-slate-100 px-1 py-0.5 rounded ml-1">
+                        {"{visitHistory}"}
+                      </code>{" "}
+                      は訪問履歴に置き換えられます
+                    </p>
+                  </div>
+                )}
 
                 {greetingMessage ? (
                   <div className="mt-4 p-5 bg-gradient-to-r from-green-50 to-teal-50 border-2 border-green-300 rounded-lg">
