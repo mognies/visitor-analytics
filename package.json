@@ -9,7 +9,10 @@
     "console",
     "sdk"
   ],
-  "scripts": {},
+  "scripts": {
+    "check": "turbo run check --affected",
+    "fix": "turbo run check --affected"
+  },
   "dependencies": {},
   "devDependencies": {
     "turbo": "^2.7.4"
