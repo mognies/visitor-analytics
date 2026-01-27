@@ -181,6 +181,7 @@ export default function VisitorAnalytics() {
         body: JSON.stringify({
           visitorId: selectedVisitor.visitorId,
           paths: selectedVisitor.paths,
+          model: selectedModel,
         }),
       });
 
