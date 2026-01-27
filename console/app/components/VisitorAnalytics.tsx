@@ -32,7 +32,8 @@ export default function VisitorAnalytics() {
   const [intentAnalysis, setIntentAnalysis] = useState<string | null>(null);
   const [generatingGreeting, setGeneratingGreeting] = useState(false);
   const [greetingMessage, setGreetingMessage] = useState<string | null>(null);
-  const [selectedModel, setSelectedModel] = useState<string>("gemini-2.5-flash");
+  const [analyzeModel, setAnalyzeModel] = useState<string>("gemini-2.5-flash");
+  const [greetingModel, setGreetingModel] = useState<string>("gemini-2.5-flash");
   const [customPrompt, setCustomPrompt] = useState<string>("");
   const [useCustomPrompt, setUseCustomPrompt] = useState<boolean>(false);
 
@@ -181,7 +182,7 @@ export default function VisitorAnalytics() {
         body: JSON.stringify({
           visitorId: selectedVisitor.visitorId,
           paths: selectedVisitor.paths,
-          model: selectedModel,
+          model: analyzeModel,
         }),
       });
 
@@ -215,7 +216,7 @@ export default function VisitorAnalytics() {
       } = {
         visitorId: selectedVisitor.visitorId,
         paths: selectedVisitor.paths,
-        model: selectedModel,
+        model: greetingModel,
         intentAnalysis: intentAnalysis || undefined,
       };
 
@@ -550,57 +551,69 @@ export default function VisitorAnalytics() {
                     </svg>
                     AI Intent Analysis
                   </h4>
-                  <button
-                    onClick={handleAnalyzeIntent}
-                    disabled={analyzingIntent}
-                    className={`px-4 py-2 rounded-lg font-medium text-sm transition-all ${
-                      analyzingIntent
-                        ? "bg-slate-100 text-slate-400 cursor-not-allowed"
-                        : "bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700 shadow-lg hover:shadow-xl transform hover:scale-105"
-                    }`}
-                  >
-                    {analyzingIntent ? (
-                      <span className="flex items-center">
-                        <svg
-                          className="animate-spin -ml-1 mr-2 h-4 w-4"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                        >
-                          <circle
-                            className="opacity-25"
-                            cx="12"
-                            cy="12"
-                            r="10"
+                  <div className="flex items-center space-x-3">
+                    <select
+                      value={analyzeModel}
+                      onChange={(e) => setAnalyzeModel(e.target.value)}
+                      disabled={analyzingIntent}
+                      className="px-3 py-2 border border-slate-300 rounded-lg text-sm font-medium text-slate-700 bg-white hover:border-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed"
+                    >
+                      <option value="gemini-2.5-flash-lite">Gemini 2.5 Flash Lite</option>
+                      <option value="gemini-2.5-flash">Gemini 2.5 Flash</option>
+                      <option value="gemini-3-flash-preview">Gemini 3 Flash Preview</option>
+                    </select>
+                    <button
+                      onClick={handleAnalyzeIntent}
+                      disabled={analyzingIntent}
+                      className={`px-4 py-2 rounded-lg font-medium text-sm transition-all ${
+                        analyzingIntent
+                          ? "bg-slate-100 text-slate-400 cursor-not-allowed"
+                          : "bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700 shadow-lg hover:shadow-xl transform hover:scale-105"
+                      }`}
+                    >
+                      {analyzingIntent ? (
+                        <span className="flex items-center">
+                          <svg
+                            className="animate-spin -ml-1 mr-2 h-4 w-4"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
+                          Analyzing...
+                        </span>
+                      ) : (
+                        <span className="flex items-center">
+                          <svg
+                            className="w-4 h-4 mr-2"
+                            fill="none"
+                            viewBox="0 0 24 24"
                             stroke="currentColor"
-                            strokeWidth="4"
-                          ></circle>
-                          <path
-                            className="opacity-75"
-                            fill="currentColor"
-                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                          ></path>
-                        </svg>
-                        Analyzing...
-                      </span>
-                    ) : (
-                      <span className="flex items-center">
-                        <svg
-                          className="w-4 h-4 mr-2"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M13 10V3L4 14h7v7l9-11h-7z"
-                          />
-                        </svg>
-                        Analyze Intent
-                      </span>
-                    )}
-                  </button>
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M13 10V3L4 14h7v7l9-11h-7z"
+                            />
+                          </svg>
+                          Analyze Intent
+                        </span>
+                      )}
+                    </button>
+                  </div>
                 </div>
 
                 {intentAnalysis ? (
@@ -697,8 +710,8 @@ export default function VisitorAnalytics() {
                   </div>
                   <div className="flex items-center space-x-3">
                     <select
-                      value={selectedModel}
-                      onChange={(e) => setSelectedModel(e.target.value)}
+                      value={greetingModel}
+                      onChange={(e) => setGreetingModel(e.target.value)}
                       disabled={generatingGreeting}
                       className="px-3 py-2 border border-slate-300 rounded-lg text-sm font-medium text-slate-700 bg-white hover:border-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed"
                     >
